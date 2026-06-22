@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Club — Homeschool Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink-50:#fff0f5;--pink-100:#fdd8e8;--pink-200:#f9a8cc;--pink-400:#e8649a;--pink-600:#b83d70;
+  --green-50:#f0faf3;--green-100:#d3f0db;--green-200:#a8ddb5;--green-400:#5cb87a;--green-600:#3a8a54;
+}
+body{font-family:'Andika',sans-serif;background:#fdf6f9;min-height:100vh;font-size:15px}
+h1,h2,h3,.fredoka{font-family:'Fredoka',sans-serif}
+.app{padding:1.5rem;max-width:1200px;margin:0 auto}
+.topbar{background:#fff0f5;border:1.5px solid var(--pink-200);border-radius:18px;padding:1rem 1.4rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.logo-blob{width:48px;height:48px;border-radius:14px;background:var(--pink-400);display:flex;align-items:center;justify-content:center;font-size:25px;flex-shrink:0}
+.topbar h1{font-size:24px;font-weight:600;color:var(--pink-600);font-family:'Fredoka',sans-serif}
+.topbar p{font-size:13px;color:var(--pink-400);margin-top:1px}
+.btn{font-family:'Andika',sans-serif;background:#fff;border:1.5px solid var(--pink-200);border-radius:20px;padding:8px 17px;font-size:14px;cursor:pointer;color:var(--pink-600);display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.btn:hover{background:var(--pink-50);border-color:var(--pink-400)}
+.btn-green{background:var(--green-50);border-color:var(--green-200);color:var(--green-600)}
+.btn-green:hover{background:var(--green-100);border-color:var(--green-400)}
+.btn-primary{background:var(--pink-400);color:#fff;border-color:var(--pink-400);font-weight:500}
+.btn-primary:hover{background:var(--pink-600);border-color:var(--pink-600)}
+.btn-sm{padding:6px 13px;font-size:13px}
+.domains-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center}
+.domain-tab{padding:8px 17px;border-radius:22px;font-size:14px;cursor:pointer;border:1.5px solid var(--pink-100);background:#fff;color:#888;transition:all .15s;display:flex;align-items:center;gap:7px;font-family:'Andika',sans-serif}
+.domain-tab:hover{border-color:var(--pink-200);background:var(--pink-50)}
+.domain-tab.active{border-color:var(--pink-400);background:var(--pink-50);color:var(--pink-600);font-weight:700}
+.domain-tab .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.card{background:#fff;border:1.5px solid var(--pink-100);border-radius:18px;overflow:hidden;margin-bottom:1rem}
+.domain-header{padding:1.1rem 1.4rem;background:var(--pink-50);border-bottom:1.5px solid var(--pink-100);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.domain-icon-wrap{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:23px;border:1.5px solid var(--pink-200);background:#fff;flex-shrink:0}
+.domain-title{font-size:18px;font-weight:600;color:var(--pink-600);font-family:'Fredoka',sans-serif}
+.domain-subtitle{font-size:13px;color:var(--pink-400);margin-top:2px}
+.progress-bar{height:7px;background:var(--pink-100);border-radius:6px;overflow:hidden;margin-top:5px;width:115px}
+.progress-fill{height:100%;border-radius:6px;background:var(--green-400);transition:width .5s}
+.progress-label{font-size:12px;color:var(--green-600)}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:1.1rem 1.4rem;border-bottom:1.5px solid var(--pink-100)}
+.stat-box{border-radius:14px;padding:.8rem 1rem;text-align:center}
+.stat-box .num{font-size:25px;font-weight:600;font-family:'Fredoka',sans-serif}
+.stat-box .lbl{font-size:12px;margin-top:3px}
+.stat-done{background:var(--green-50)}.stat-done .num{color:var(--green-600)}.stat-done .lbl{color:var(--green-400)}
+.stat-prog{background:#fffbea}.stat-prog .num{color:#c0860a}.stat-prog .lbl{color:#c0860a}
+.stat-idle{background:var(--pink-50)}.stat-idle .num{color:var(--pink-400)}.stat-idle .lbl{color:var(--pink-400)}
+.ages-row{display:flex;gap:6px;flex-wrap:wrap;padding:.8rem 1.4rem .3rem}
+.age-chip{padding:5px 14px;border-radius:14px;font-size:13px;cursor:pointer;border:1.5px solid var(--pink-100);background:#fff;color:#999;font-family:'Andika',sans-serif;transition:all .15s}
+.age-chip:hover{border-color:var(--pink-200);background:var(--pink-50)}
+.age-chip.active{background:var(--green-400);border-color:var(--green-400);color:#fff;font-weight:700}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{padding:10px 13px;text-align:left;font-family:'Fredoka',sans-serif;font-size:14px;font-weight:500;color:var(--pink-600);border-bottom:1.5px solid var(--pink-100);background:var(--pink-50)}
+td{padding:11px 13px;border-bottom:1px solid var(--pink-50);vertical-align:top;color:#444;font-family:'Andika',sans-serif}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fffafb}
+.age-badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:700;font-family:'Fredoka',sans-serif;white-space:nowrap}
+.concept-badge{display:inline-block;padding:3px 10px;border-radius:9px;font-size:12px;font-family:'Andika',sans-serif;line-height:1.5;white-space:normal;word-break:break-word}
+.milestone-text{font-size:14px;line-height:1.6;color:#333}
+.level-tag{font-size:12px;color:#aaa;margin-top:4px}
+.check-wrap{text-align:center}
+.check-btn{width:32px;height:32px;border-radius:50%;border:2px solid var(--pink-200);background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .2s;color:#ccc;font-size:15px}
+.check-btn:hover{border-color:var(--green-400);color:var(--green-400)}
+.check-btn.done{background:var(--green-400);border-color:var(--green-400);color:#fff}
+.check-btn.in-progress{background:#f9c74f;border-color:#f9c74f;color:#fff}
+.note-input{width:100%;background:var(--pink-50);border:1.5px solid var(--pink-100);border-radius:10px;padding:7px 10px;font-size:13px;color:#444;font-family:'Andika',sans-serif;resize:none;min-height:36px;height:auto;line-height:1.55;overflow:hidden;white-space:pre-wrap;word-break:break-word;transition:border .15s,background .15s}
+.note-input:focus{outline:none;border-color:var(--pink-400);background:#fff}
+.modal-overlay{position:fixed;inset:0;background:rgba(180,80,120,.22);display:flex;align-items:center;justify-content:center;z-index:1000}
+.modal{background:#fff;border-radius:20px;border:2px solid var(--pink-100);width:460px;max-width:calc(100% - 2rem);padding:1.6rem;max-height:90vh;overflow-y:auto}
+.modal h2{font-size:20px;font-weight:600;color:var(--pink-600);margin-bottom:3px;font-family:'Fredoka',sans-serif}
+.modal .sub{font-size:14px;color:#aaa;margin-bottom:1.3rem}
+.form-row{margin-bottom:1.1rem}
+.form-row label{display:block;font-size:13px;font-weight:700;color:var(--pink-400);margin-bottom:5px;font-family:'Fredoka',sans-serif}
+.form-row input,.form-row select,.form-row textarea{width:100%;background:var(--pink-50);border:1.5px solid var(--pink-100);border-radius:12px;padding:10px 13px;font-size:14px;color:#333;font-family:'Andika',sans-serif;transition:border .15s}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:var(--pink-400);background:#fff}
+.form-row textarea{resize:none;min-height:78px}
+.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:1.3rem;flex-wrap:wrap}
+.icon-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:6px}
+.icon-opt{width:38px;height:38px;border-radius:10px;border:1.5px solid var(--pink-100);display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;transition:all .15s}
+.icon-opt:hover{border-color:var(--pink-400);background:var(--pink-50)}
+.icon-opt.selected{border-color:var(--pink-400);background:var(--pink-50)}
+.color-dot{width:27px;height:27px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:border .15s}
+.color-dot.sel{border-color:#555}
+.empty-state{padding:3rem;text-align:center;color:var(--pink-400)}
+.empty-state i{font-size:42px;margin-bottom:.75rem;display:block;opacity:.4}
+.empty-state .etitle{font-size:18px;font-family:'Fredoka',sans-serif;font-weight:600;margin-bottom:6px;color:var(--pink-600)}
+.save-toast{position:fixed;bottom:20px;right:20px;background:var(--green-400);color:#fff;font-family:'Fredoka',sans-serif;font-size:15px;padding:9px 20px;border-radius:14px;opacity:0;transition:opacity .3s;z-index:2000;pointer-events:none}
+.save-toast.show{opacity:1}
+.danger-btn{color:#d44;border-color:#fcc}
+.danger-btn:hover{background:#fff5f5;border-color:#f99}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo-blob">🌱</div>
+      <div>
+        <h1>Home Club</h1>
+        <p>Homeschool milestone tracker · Ages 0–5</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-sm btn-green" onclick="exportJSON()" title="Download all data as JSON"><i class="ti ti-download"></i> Export</button>
+      <button class="btn btn-primary" onclick="openAddDomain()"><i class="ti ti-plus"></i> Add domain</button>
+    </div>
+  </div>
+  <div class="domains-nav" id="domainsNav"></div>
+  <div id="mainContent"></div>
+  <div id="modalMount"></div>
+  <div class="save-toast" id="toast">Saved! 🌿</div>
+</div>
+<script>
+const COLORS=[
+  {bg:'#fff0f5',border:'#f9a8cc',dot:'#e8649a',text:'#b83d70',name:'pink'},
+  {bg:'#f0faf3',border:'#a8ddb5',dot:'#5cb87a',text:'#3a8a54',name:'green'},
+  {bg:'#f5f0ff',border:'#c9b8f4',dot:'#9b7ee8',text:'#5e3db5',name:'lavender'},
+  {bg:'#fff4ee',border:'#ffc8a0',dot:'#f4874b',text:'#b85520',name:'peach'},
+  {bg:'#f0f8ff',border:'#aad4f5',dot:'#4eaaee',text:'#1a6aaa',name:'sky'},
+  {bg:'#fffbea',border:'#f9d67a',dot:'#e8a720',text:'#a06a00',name:'yellow'},
+];
+const ICONS=['📐','🔢','🌍','🎨','🔬','📚','🎵','🏃','🌿','🧩','💬','⭐','🦋','🌈','🐝','🎭','🐣','🌸','🍎','🦊','🌻','🎯','🧸','🖍️'];
+const AGE_BANDS=['0–1','1–2','2–3','3–4','4–5'];
+const AGE_STYLE={'0–1':{bg:'#fff0f5',text:'#b83d70'},'1–2':{bg:'#fff4ee',text:'#b85520'},'2–3':{bg:'#f5f0ff',text:'#5e3db5'},'3–4':{bg:'#f0faf3',text:'#3a8a54'},'4–5':{bg:'#fffbea',text:'#a06a00'}};
+const STORAGE_KEY='littlelearner_v1';
+let state={activeDomain:0,domains:[],ageFilter:'all'};
+let nextId=200;
+let saveTimer=null;
+
+function mkrows(arr){return arr.map((r,i)=>({...r,id:'r'+i}));}
+
+const MATH_ROWS=mkrows([
+  {concept:'Counting & Cardinality',age:'0–1',milestone:'Chants random sounds and vocalizes rhythms',level:'Pre-Counter',status:'done',note:'Loves singing along!'},
+  {concept:'Counting & Cardinality',age:'1–2',milestone:'Says random number words during open play',level:'Pre-Counter',status:'done',note:''},
+  {concept:'Counting & Cardinality',age:'2–3',milestone:'Chants numbers 1 to 5 in the correct order',level:'Verbal Counter',status:'in-progress',note:'Getting there — tries every morning'},
+  {concept:'Counting & Cardinality',age:'3–4',milestone:'Touches and counts up to 5 items accurately',level:'Object Counter',status:'',note:''},
+  {concept:'Counting & Cardinality',age:'4–5',milestone:'Counts a messy pile up to 10 and states total',level:'Counter to 10',status:'',note:''},
+  {concept:'Subitizing & Quantity',age:'0–1',milestone:'Notices a visual difference between 1 item and 2',level:'Pre-Subitizer',status:'done',note:''},
+  {concept:'Subitizing & Quantity',age:'1–2',milestone:'Separates a single item from "lots"',level:'Small Collection Namer',status:'done',note:''},
+  {concept:'Subitizing & Quantity',age:'2–3',milestone:'Recognises a pair (2 objects) instantly by sight',level:'Maker of Small Sets',status:'in-progress',note:''},
+  {concept:'Subitizing & Quantity',age:'3–4',milestone:'Looks at 3 items and names the amount instantly',level:'Perceptual Subitizer',status:'',note:''},
+  {concept:'Subitizing & Quantity',age:'4–5',milestone:'Sees 5 dots and breaks it down (e.g. "3 and 2")',level:'Conceptual Subitizer',status:'',note:''},
+  {concept:'Geometry & Spatial Sense',age:'0–1',milestone:'Tracks moving toys and objects visually',level:'Spatial Prototype',status:'done',note:''},
+  {concept:'Geometry & Spatial Sense',age:'1–2',milestone:'Drops objects inside buckets and takes them out',level:'Spatial Prototype',status:'done',note:''},
+  {concept:'Geometry & Spatial Sense',age:'2–3',milestone:'Matches identical flat geometric shapes by eye',level:'Shape Recognizer',status:'in-progress',note:'Great with circles!'},
+  {concept:'Geometry & Spatial Sense',age:'3–4',milestone:'Uses positional words like under, on, or inside',level:'Spatial Locator',status:'',note:''},
+  {concept:'Geometry & Spatial Sense',age:'4–5',milestone:'Combines two small triangles to construct a square',level:'Shape Composer',status:'',note:''},
+  {concept:'Sorting & Patterning',age:'0–1',milestone:'Reacts to repetitive beats or vocal patterns',level:'Intuitive Patterner',status:'done',note:''},
+  {concept:'Sorting & Patterning',age:'1–2',milestone:'Follows structural visual routines of the day',level:'Intuitive Patterner',status:'done',note:''},
+  {concept:'Sorting & Patterning',age:'2–3',milestone:'Groups distinct objects by 1 rule (e.g. color)',level:'Attribute Classifier',status:'',note:''},
+  {concept:'Sorting & Patterning',age:'3–4',milestone:'Copies and extends an alternating AB pattern',level:'Pattern Duplicator',status:'',note:''},
+  {concept:'Sorting & Patterning',age:'4–5',milestone:'Sorts by 2 rules at once (e.g. blue AND large)',level:'Multi-Attribute Classifier',status:'',note:''},
+  {concept:'Early Operations & Logic',age:'0–1',milestone:'Notices if a cup or bowl is empty vs full',level:'Quantity Intuitive',status:'done',note:''},
+  {concept:'Early Operations & Logic',age:'1–2',milestone:'Asks for "more" using physical signs or words',level:'Quantity Comparer',status:'done',note:''},
+  {concept:'Early Operations & Logic',age:'2–3',milestone:'Notices when an item has been taken away',level:'Quantity Changer',status:'in-progress',note:''},
+  {concept:'Early Operations & Logic',age:'3–4',milestone:'Identifies which pile has "more" just by looking',level:'Magnitude Comparer',status:'',note:''},
+  {concept:'Early Operations & Logic',age:'4–5',milestone:'Solves basic adding problems within 5 using fingers',level:'Find Result',status:'',note:''},
+  {concept:'Measurement & Estimation',age:'0–1',milestone:'Explores physical limits by stretching for toys',level:'Size Explorer',status:'done',note:''},
+  {concept:'Measurement & Estimation',age:'1–2',milestone:'Points out an obviously big item vs a small one',level:'Gross Size Comparer',status:'done',note:''},
+  {concept:'Measurement & Estimation',age:'2–3',milestone:'Holds two items to find out which one feels heavier',level:'Weight Intuitive',status:'in-progress',note:''},
+  {concept:'Measurement & Estimation',age:'3–4',milestone:'Fills containers to compare total fluid volume',level:'Volume Comparer',status:'',note:''},
+  {concept:'Measurement & Estimation',age:'4–5',milestone:'Orders 3 items by height; estimates amounts to 10',level:'Measurer & Estimator',status:'',note:''},
+  {concept:'Time, Sequence & Money',age:'0–1',milestone:'Relies on predictable visual routines (nap, feed)',level:'Sequence Intuitive',status:'done',note:''},
+  {concept:'Time, Sequence & Money',age:'1–2',milestone:'Understands the immediate difference of "now" vs "later"',level:'Time Initer',status:'done',note:''},
+  {concept:'Time, Sequence & Money',age:'2–3',milestone:'Associates actions with "daytime" or "night-time"',level:'Cycle Recognizer',status:'',note:''},
+  {concept:'Time, Sequence & Money',age:'3–4',milestone:'Sequences 3 picture cards showing a daily routine',level:'Sequence Orderer',status:'',note:''},
+  {concept:'Time, Sequence & Money',age:'4–5',milestone:'Names days of the week; identifies specific coins',level:'Time Tracker',status:'',note:''},
+]);
+
+const ENGLISH_ROWS=mkrows([
+  {concept:'Listening & Spoken Language',age:'0–1',milestone:'Responds to caregiver\'s voice and turns head toward sound sources',level:'Pre-Linguistic Listener',status:'',note:''},
+  {concept:'Listening & Spoken Language',age:'0–1',milestone:'Vocalises using cooing, gurgling, and varied pitch in response to speech',level:'Pre-Linguistic Listener',status:'',note:''},
+  {concept:'Listening & Spoken Language',age:'1–2',milestone:'Follows simple one-step spoken instructions (e.g. "give me the ball")',level:'Emergent Listener',status:'',note:''},
+  {concept:'Listening & Spoken Language',age:'1–2',milestone:'Uses 10–20 recognisable words and understands 50+ words',level:'Emergent Listener',status:'',note:''},
+  {concept:'Listening & Spoken Language',age:'2–3',milestone:'Uses 2–3 word phrases to communicate wants and observations',level:'Early Speaker',status:'',note:''},
+  {concept:'Listening & Spoken Language',age:'2–3',milestone:'Listens to short stories and responds to simple questions about them',level:'Early Speaker',status:'',note:''},
+  {concept:'Listening & Spoken Language',age:'3–4',milestone:'Uses sentences of 4–6 words; asks "why", "what" and "where" questions',level:'Communicator',status:'',note:''},
+  {concept:'Listening & Spoken Language',age:'3–4',milestone:'Retells key events from a familiar story in rough sequence',level:'Communicator',status:'',note:''},
+  {concept:'Listening & Spoken Language',age:'4–5',milestone:'Sustains a topic in conversation; uses past and future tense correctly',level:'Fluent Communicator',status:'',note:''},
+  {concept:'Listening & Spoken Language',age:'4–5',milestone:'Narrates a personal experience with beginning, middle, and end',level:'Fluent Communicator',status:'',note:''},
+  {concept:'Phonological Awareness',age:'0–1',milestone:'Responds differently to rhythmic nursery rhymes vs plain speech',level:'Sound Attender',status:'',note:''},
+  {concept:'Phonological Awareness',age:'1–2',milestone:'Joins in with repeated refrains in songs and rhymes',level:'Rhythm Joiner',status:'',note:''},
+  {concept:'Phonological Awareness',age:'2–3',milestone:'Claps syllables in own name and familiar 2-syllable words',level:'Syllable Clapper',status:'',note:''},
+  {concept:'Phonological Awareness',age:'2–3',milestone:'Recognises and supplies simple rhyming words (cat/hat, dog/log)',level:'Rhyme Recogniser',status:'',note:''},
+  {concept:'Phonological Awareness',age:'3–4',milestone:'Identifies the beginning sound of own name and familiar words',level:'Onset Spotter',status:'',note:''},
+  {concept:'Phonological Awareness',age:'3–4',milestone:'Blends two onset-rime chunks into a word (e.g. /c/+/at/ = cat)',level:'Blender',status:'',note:''},
+  {concept:'Phonological Awareness',age:'4–5',milestone:'Segments a 3-phoneme word into individual sounds (/c/-/a/-/t/)',level:'Phoneme Segmenter',status:'',note:''},
+  {concept:'Phonological Awareness',age:'4–5',milestone:'Manipulates initial phonemes to create new words (cat to bat)',level:'Phoneme Manipulator',status:'',note:''},
+  {concept:'Vocabulary & Concepts',age:'0–1',milestone:'Responds to own name and "no" consistently',level:'Name Recogniser',status:'',note:''},
+  {concept:'Vocabulary & Concepts',age:'1–2',milestone:'Points to 5+ body parts, familiar objects, and people when named',level:'Early Word Mapper',status:'',note:''},
+  {concept:'Vocabulary & Concepts',age:'2–3',milestone:'Understands and uses basic concept words: big/small, hot/cold, in/out',level:'Concept User',status:'',note:''},
+  {concept:'Vocabulary & Concepts',age:'3–4',milestone:'Uses descriptive vocabulary: colours, shapes, sizes, textures in sentences',level:'Descriptor',status:'',note:''},
+  {concept:'Vocabulary & Concepts',age:'4–5',milestone:'Uses category words (animals, furniture, food) and new vocabulary from books',level:'Word Collector',status:'',note:''},
+  {concept:'Print Awareness & Emergent Reading',age:'1–2',milestone:'Holds a board book the right way up; turns pages with interest',level:'Book Handler',status:'',note:''},
+  {concept:'Print Awareness & Emergent Reading',age:'2–3',milestone:'Points at pictures and labels familiar objects in books',level:'Picture Linker',status:'',note:''},
+  {concept:'Print Awareness & Emergent Reading',age:'3–4',milestone:'Understands that print carries meaning; tracks text left-to-right with finger',level:'Print Aware',status:'',note:''},
+  {concept:'Print Awareness & Emergent Reading',age:'3–4',milestone:'Recognises own name in print and some environmental logos',level:'Sight Word Spotter',status:'',note:''},
+  {concept:'Print Awareness & Emergent Reading',age:'4–5',milestone:'Matches some letters to their sounds; reads 5–10 high-frequency sight words',level:'Emergent Decoder',status:'',note:''},
+  {concept:'Emergent Writing',age:'1–2',milestone:'Makes marks on paper with crayons with intent',level:'Mark Maker',status:'',note:''},
+  {concept:'Emergent Writing',age:'2–3',milestone:'Uses scribble writing in role-play, pretending to write a list or letter',level:'Pretend Writer',status:'',note:''},
+  {concept:'Emergent Writing',age:'3–4',milestone:'Writes own name or first initial using recognisable letterforms',level:'Name Writer',status:'',note:''},
+  {concept:'Emergent Writing',age:'4–5',milestone:'Writes letters and simple CVC words using invented spelling with phonemic logic',level:'Phonetic Writer',status:'',note:''},
+]);
+
+const TAMIL_ROWS=mkrows([
+  {concept:'Phonology & Oral Tamil',age:'0–1',milestone:'Responds to Tamil lullabies (thaalaattu) and caregiver\'s Tamil speech',level:'Tamil Sound Absorber',status:'',note:''},
+  {concept:'Phonology & Oral Tamil',age:'0–1',milestone:'Produces varied vocalisations mirroring Tamil intonation patterns',level:'Tamil Sound Absorber',status:'',note:''},
+  {concept:'Phonology & Oral Tamil',age:'1–2',milestone:'Uses 5–10 Tamil words for familiar objects, people, and actions',level:'Early Tamil Speaker',status:'',note:''},
+  {concept:'Phonology & Oral Tamil',age:'1–2',milestone:'Joins in with Tamil rhymes and action songs (e.g. kaakai chirukkintha)',level:'Early Tamil Speaker',status:'',note:''},
+  {concept:'Phonology & Oral Tamil',age:'2–3',milestone:'Produces Tamil-specific sounds including retroflex consonants (zh, n, l)',level:'Tamil Phoneme Builder',status:'',note:''},
+  {concept:'Phonology & Oral Tamil',age:'2–3',milestone:'Uses 2-word Tamil phrases; responds to Tamil-only instructions at home',level:'Tamil Phrase User',status:'',note:''},
+  {concept:'Phonology & Oral Tamil',age:'3–4',milestone:'Speaks in complete Tamil sentences; uses basic honorifics (neengal vs nee)',level:'Tamil Sentence Speaker',status:'',note:''},
+  {concept:'Phonology & Oral Tamil',age:'4–5',milestone:'Tells a simple story or recalls an event in Tamil; uses past tense markers',level:'Tamil Narrator',status:'',note:''},
+  {concept:'Script & Letter Awareness',age:'2–3',milestone:'Recognises that Tamil script looks different from other writing systems',level:'Script Noticer',status:'',note:''},
+  {concept:'Script & Letter Awareness',age:'3–4',milestone:'Identifies and names the 5 short vowels (a, i, u, e, o) by sight in Tamil script',level:'Vowel Recogniser',status:'',note:''},
+  {concept:'Script & Letter Awareness',age:'3–4',milestone:'Traces the basic strokes of Tamil letters with guidance',level:'Stroke Tracer',status:'',note:''},
+  {concept:'Script & Letter Awareness',age:'4–5',milestone:'Recognises 10+ Tamil consonants across vallinam, mellinam, idaiyinam groups',level:'Consonant Spotter',status:'',note:''},
+  {concept:'Script & Letter Awareness',age:'4–5',milestone:'Writes or copies own name in Tamil script with recognisable letterforms',level:'Tamil Name Writer',status:'',note:''},
+  {concept:'Literature & Cultural Literacy',age:'0–1',milestone:'Calms or engages with traditional Tamil thaalaattu lullabies',level:'Cultural Soaker',status:'',note:''},
+  {concept:'Literature & Cultural Literacy',age:'1–2',milestone:'Listens to and anticipates repetition in simple Tamil picture books',level:'Story Listener',status:'',note:''},
+  {concept:'Literature & Cultural Literacy',age:'2–3',milestone:'Recites at least 2 short Tamil nursery rhymes or folk songs from memory',level:'Rhyme Reciter',status:'',note:''},
+  {concept:'Literature & Cultural Literacy',age:'3–4',milestone:'Knows and retells at least one Tamil Panchatantra or Thirukkural story in own words',level:'Story Keeper',status:'',note:''},
+  {concept:'Literature & Cultural Literacy',age:'4–5',milestone:'Recites 2 Thirukkural couplets and explains the meaning in own words',level:'Kural Keeper',status:'',note:''},
+  {concept:'Grammar Foundations',age:'2–3',milestone:'Correctly uses gender markers (avan/aval) for known people',level:'Gender Marker User',status:'',note:''},
+  {concept:'Grammar Foundations',age:'3–4',milestone:'Uses verb tense endings for present and past tense correctly in speech',level:'Tense User',status:'',note:''},
+  {concept:'Grammar Foundations',age:'4–5',milestone:'Constructs SOV sentences correctly (Subject-Object-Verb Tamil word order)',level:'SOV Builder',status:'',note:''},
+]);
+
+const CARNATIC_ROWS=mkrows([
+  // Attentive Listening — the inner ear (Dalcroze: listen before you produce)
+  {concept:'Attentive Listening',age:'0–1',milestone:'Stills or orients body toward live music or tanpura drone; shows differential response to melody vs noise',level:'Sound Attender',status:'',note:'Play: tanpura drone, veena, flute — just let her listen. No expectation to respond.'},
+  {concept:'Attentive Listening',age:'0–1',milestone:'Visibly soothes to slow, melodic Carnatic music and brightens to faster, rhythmic pieces',level:'Mood Receiver',status:'',note:'Try: Mohanam (calm) vs Bilahari (bright, joyful) — observe her body'},
+  {concept:'Attentive Listening',age:'1–2',milestone:'Pauses play and listens when a new raga begins on the music player',level:'Active Listener',status:'',note:'Let listening be the activity itself — no need to do anything else'},
+  {concept:'Attentive Listening',age:'2–3',milestone:'Sits and listens to a complete short Carnatic piece (2–3 min) without redirection',level:'Sustained Listener',status:'',note:'World Music Pedagogy: attentive listening phase — just experience, no analysis yet'},
+  {concept:'Attentive Listening',age:'3–4',milestone:'Notices when the music changes — faster/slower, louder/softer, high/low — and points or comments',level:'Change Noticer',status:'',note:'Ask: "Did anything change?" — hold the question, let her find it'},
+  {concept:'Attentive Listening',age:'4–5',milestone:'Describes what a piece of music makes her feel, imagine, or see — without prompting',level:'Inner Ear Listener',status:'',note:'Ask: "Where does this music take you?" — accept any answer fully'},
+  // Embodied Music Response — Dalcroze: the body IS the instrument
+  {concept:'Embodied Music Response',age:'0–1',milestone:'Body moves involuntarily with music — limb swaying, bouncing, kicking in rhythm',level:'Rhythm Body',status:'',note:'Hold her and move together — she absorbs pulse through your body'},
+  {concept:'Embodied Music Response',age:'1–2',milestone:'Sways, bounces, and claps spontaneously when music plays — without being asked',level:'Spontaneous Mover',status:'',note:'Dalcroze principle: rhythm is physical before it is mental. Let her move freely.'},
+  {concept:'Embodied Music Response',age:'2–3',milestone:'Walks/stomps to a beat played on a drum or tabla; adjusts pace when tempo changes',level:'Tempo Walker',status:'',note:'Try: walk fast to fast tabla, slow to slow — she internalises laya in her legs'},
+  {concept:'Embodied Music Response',age:'3–4',milestone:'Moves different body parts to reflect musical qualities — floats arms to slow aalap, stamps to fast passages',level:'Expressive Mover',status:'',note:'No right answer — any movement that reflects what she hears is correct'},
+  {concept:'Embodied Music Response',age:'4–5',milestone:'Creates a spontaneous movement "story" or sequence in response to a Carnatic piece played through',level:'Choreographic Listener',status:'',note:'Dalcroze eurhythmics: full body is the listening instrument'},
+  // Raga Rasa — feeling the emotional world of ragas
+  {concept:'Raga Rasa — Mood & Feeling',age:'1–2',milestone:'Shows different body language to clearly contrasting ragas (e.g. calm Ananda Bhairavi vs playful Kapi)',level:'Rasa Feeler',status:'',note:'No need to name ragas — just play them and watch her face and body'},
+  {concept:'Raga Rasa — Mood & Feeling',age:'2–3',milestone:'Associates a familiar raga with a feeling word ("this one is happy", "this one is sleepy")',level:'Rasa Namer',status:'',note:'Ragas to explore: Mohanam (joyful), Ananda Bhairavi (tender), Bhairavi (longing), Kapi (playful)'},
+  {concept:'Raga Rasa — Mood & Feeling',age:'3–4',milestone:'Asks for a specific raga or song by name because of how it makes her feel',level:'Rasa Requester',status:'',note:'This shows she has an inner library — a musical identity forming'},
+  {concept:'Raga Rasa — Mood & Feeling',age:'3–4',milestone:'Draws or paints in response to a raga playing — colour and form reflect the mood',level:'Rasa Painter',status:'',note:'Play a raga, give her paints, say nothing. See what emerges.'},
+  {concept:'Raga Rasa — Mood & Feeling',age:'4–5',milestone:'Explains unprompted why she loves a piece of music — references its feeling, story, or beauty',level:'Musical Aesthete',status:'',note:''},
+  // Rhythm as Play — internalising laya through body and sound games
+  {concept:'Rhythm as Play',age:'0–1',milestone:'Responds to clapping, drumming, and rhythmic speech with visible physical excitement',level:'Rhythm Receiver',status:'',note:'Tap rhythms on her back, hands, feet during play — she absorbs laya sensorially'},
+  {concept:'Rhythm as Play',age:'1–2',milestone:'Bangs a drum, pot, or dholak to produce sounds; experiments with fast and slow striking',level:'Sound Maker',status:'',note:'Any household percussion counts — pots, dabbas, wooden spoons'},
+  {concept:'Rhythm as Play',age:'2–3',milestone:'Keeps a steady beat for 8+ counts on a percussion instrument while music plays',level:'Steady Beater',status:'',note:''},
+  {concept:'Rhythm as Play',age:'2–3',milestone:'Plays echo rhythm games — adult taps a pattern, she copies it on a drum',level:'Echo Clapper',status:'',note:'Start with 2-beat patterns, grow to 4. No solkattu syllables needed yet.'},
+  {concept:'Rhythm as Play',age:'3–4',milestone:'Invents her own rhythm patterns and teaches them back to the adult',level:'Rhythm Inventor',status:'',note:'Flip it: she leads, you copy. This builds ownership and musical confidence.'},
+  {concept:'Rhythm as Play',age:'4–5',milestone:'Claps or taps along with Adi tala cycle felt in the body — not recited, but felt and kept',level:'Tala Feeler',status:'',note:'The goal is internalised pulse, not correct hand position or solkattu recitation'},
+  // Sonic Curiosity — world music listening and musical wonder
+  {concept:'Sonic Curiosity & Musical World',age:'1–2',milestone:'Shows curiosity about instruments — reaches toward veena, mridangam, flute when present',level:'Instrument Curious',status:'',note:'Let her touch a veena string, feel the mridangam skin vibrate — sound is physical'},
+  {concept:'Sonic Curiosity & Musical World',age:'2–3',milestone:'Identifies 3+ Carnatic instruments by sight or sound (veena, mridangam, violin, flute)',level:'Instrument Namer',status:'',note:'Show pictures, play recordings, visit concerts or sabhas if possible'},
+  {concept:'Sonic Curiosity & Musical World',age:'3–4',milestone:'Listens with curiosity to music from a different tradition (e.g. Hindustani, jazz, folk) and comments on what is different',level:'Cross-Music Explorer',status:'',note:'World Music Pedagogy: breadth of listening builds depth of appreciation'},
+  {concept:'Sonic Curiosity & Musical World',age:'4–5',milestone:'Asks questions about music ("how does the veena make that sound?", "why does this feel different?") — shows genuine musical inquiry',level:'Musical Inquirer',status:'',note:'Hold questions with wonder — investigate together, don\'t just give answers'},
+]);
+
+const ART_ROWS=mkrows([
+  // Material Exploration — Reggio: materials as languages, not tools for products
+  {concept:'Material Exploration',age:'0–1',milestone:'Explores soft materials (cooked rice, fabric, playdough) using hands, feet, and mouth for sensory discovery',level:'Material Feeler',status:'',note:'Reggio: materials are a language. No product expected — pure exploration.'},
+  {concept:'Material Exploration',age:'0–1',milestone:'Reaches toward colourful, textured, and reflective objects; visually tracks moving surfaces',level:'Visual Explorer',status:'',note:'Hang natural mobiles (leaves, cloth, shells) — beauty as first curriculum'},
+  {concept:'Material Exploration',age:'1–2',milestone:'Explores paint, mud, sand, and water with full hands — smearing, patting, pouring',level:'Messy Material Player',status:'',note:'Process over product always. Resist asking "what is it?"'},
+  {concept:'Material Exploration',age:'1–2',milestone:'Explores what different materials can do: tears paper, squishes clay, drags a stick through sand',level:'Material Investigator',status:'',note:'Offer: tissue paper, wet clay, dry sand, fallen leaves, bark — rotate weekly'},
+  {concept:'Material Exploration',age:'2–3',milestone:'Spends 5+ minutes investigating a single material, discovering its properties through manipulation',level:'Deep Material Inquirer',status:'',note:'Reggio atelier approach: sustained engagement with one material at a time'},
+  {concept:'Material Exploration',age:'3–4',milestone:'Combines two or more materials purposefully (clay + sticks, paint + sand) and observes what happens',level:'Material Combiner',status:'',note:''},
+  {concept:'Material Exploration',age:'4–5',milestone:'Selects specific materials to realise a creative intention ("I need something rough for the bark of the tree")',level:'Intentional Material Chooser',status:'',note:'Project Zero: envision — children think about what they want before they make'},
+  // Craft Skills — hands making beautiful, functional things
+  {concept:'Craft Skills',age:'1–2',milestone:'Tears paper into pieces intentionally; presses shapes into soft clay with tools or fingers',level:'Tear & Press Crafter',status:'',note:''},
+  {concept:'Craft Skills',age:'2–3',milestone:'Folds paper in half and into simple forms (fan, boat) following one modelled step',level:'Paper Folder',status:'',note:'Origami foundation — a fold is a decision, not just a motor act'},
+  {concept:'Craft Skills',age:'2–3',milestone:'Weaves thick yarn or strips over and under a simple cardboard loom (2–3 rows)',level:'First Weaver',status:'',note:'Weaving roots: connects to kanjivaram, basket-making traditions — over/under is also logic'},
+  {concept:'Craft Skills',age:'3–4',milestone:'Cuts along a straight and curved line with safety scissors to produce a usable shape',level:'Intentional Cutter',status:'',note:''},
+  {concept:'Craft Skills',age:'3–4',milestone:'Creates a simple nature collage using collected leaves, seeds, bark, and petals — arranged with intention',level:'Nature Collagist',status:'',note:'Connect to outdoor walks — collecting IS the beginning of making'},
+  {concept:'Craft Skills',age:'3–4',milestone:'Completes a 6–8 row weaving on a small loom, keeping tension and alternating over/under',level:'Loom Weaver',status:'',note:''},
+  {concept:'Craft Skills',age:'4–5',milestone:'Makes running stitches through burlap or felt using a blunt tapestry needle and thick yarn',level:'First Stitcher',status:'',note:'Introduce threading needle as a ritual: slow, intentional, rewarding'},
+  {concept:'Craft Skills',age:'4–5',milestone:'Completes a multi-step craft project (e.g. clay pinch pot, woven bookmark, stitched cloth) from start to finish across multiple sessions',level:'Sustained Maker',status:'',note:'Project Zero: persistence and craft take multiple sittings — normalise returning to work'},
+  // Clay as Language — clay is its own deep strand
+  {concept:'Clay as Language',age:'0–1',milestone:'Squeezes, pats, and pokes soft clay without agenda — full sensory engagement',level:'Clay Sensor',status:'',note:''},
+  {concept:'Clay as Language',age:'1–2',milestone:'Rolls a ball and a coil (snake) from clay — discovers two fundamental clay forms',level:'Ball & Coil Maker',status:'',note:'These two forms are the grammar of clay — everything else follows'},
+  {concept:'Clay as Language',age:'2–3',milestone:'Pinches a clay ball to make a cup or bowl form; pokes holes and makes marks with tools',level:'Pinch Potter',status:'',note:''},
+  {concept:'Clay as Language',age:'3–4',milestone:'Constructs a recognisable clay object (animal, pot, figure) using coil, pinch, and slab methods',level:'Clay Builder',status:'',note:''},
+  {concept:'Clay as Language',age:'4–5',milestone:'Returns to a dried clay piece to paint, decorate, or refine it — treats it as a real object with value',level:'Clay Finisher',status:'',note:'Caring for the finished piece teaches value of handmade objects'},
+  // Kolam & Pattern — Indian visual mathematics
+  {concept:'Kolam & Pattern',age:'1–2',milestone:'Watches kolam-making with focused attention; imitates the gesture of drawing on the floor',level:'Kolam Watcher',status:'',note:'Kolam is geometry, meditation, and beauty in one practice'},
+  {concept:'Kolam & Pattern',age:'2–3',milestone:'Makes dot grids using fingers dipped in paint or chalk — spaces dots in rough rows',level:'Dot Maker',status:'',note:'Dots before lines — the pulli is the foundation of all kolam'},
+  {concept:'Kolam & Pattern',age:'3–4',milestone:'Draws a 3×3 pulli kolam with chalk — places dots and connects with simple loops',level:'Pulli Connector',status:'',note:''},
+  {concept:'Kolam & Pattern',age:'4–5',milestone:'Creates a simple symmetrical kolam pattern and adds colour or flowers to complete it beautifully',level:'Kolam Maker',status:'',note:'Connect to: mathematics (symmetry), mindfulness (repetition), cultural identity'},
+  // Art Appreciation — Project Zero: Thinking Through Art
+  {concept:'Art Appreciation & Looking',age:'0–1',milestone:'Gazes at high-contrast images, faces, and natural light — preferential looking shows aesthetic response',level:'Visual Attendee',status:'',note:'Hang simple black-and-white prints and nature photographs at eye level'},
+  {concept:'Art Appreciation & Looking',age:'1–2',milestone:'Points at and vocalises about images in picture books and on walls — shows preferences',level:'Image Pointer',status:'',note:'Project Zero: looking closely is a learnable skill — it begins here'},
+  {concept:'Art Appreciation & Looking',age:'2–3',milestone:'Spends 2+ minutes looking closely at a single artwork, print, or natural object — and describes what she sees',level:'Close Looker',status:'',note:'Ask: "What do you see?" — not "What is it?" Accept all observations'},
+  {concept:'Art Appreciation & Looking',age:'3–4',milestone:'Compares two artworks or objects — notices similarities, differences, what she likes more and why',level:'Art Comparer',status:'',note:'Project Zero Artful Thinking: "I see... I think... I wonder..." as a routine'},
+  {concept:'Art Appreciation & Looking',age:'4–5',milestone:'Talks about own finished work — describes choices made, what she is proud of, what she might change',level:'Reflective Artist',status:'',note:'Studio Thinking (Harvard PZ): reflection is a studio habit of mind — teach it early'},
+]);
+
+const MOVEMENT_ROWS=mkrows([
+  {concept:'Gross Motor — Body Control',age:'0–1',milestone:'Lifts head during tummy time; rolls from back to front and front to back',level:'Head & Roller',status:'',note:''},
+  {concept:'Gross Motor — Body Control',age:'0–1',milestone:'Sits with support (4–6 months) then without support (7–9 months)',level:'Sitter',status:'',note:''},
+  {concept:'Gross Motor — Body Control',age:'0–1',milestone:'Pulls to stand on furniture; cruises sideways along furniture',level:'Cruiser',status:'',note:''},
+  {concept:'Gross Motor — Body Control',age:'1–2',milestone:'Takes first independent steps; walks independently with wide stance',level:'Early Walker',status:'',note:''},
+  {concept:'Gross Motor — Body Control',age:'1–2',milestone:'Climbs onto low furniture; squats to pick up objects and stands again',level:'Climber & Squatter',status:'',note:''},
+  {concept:'Gross Motor — Body Control',age:'2–3',milestone:'Runs with improved coordination; stops and changes direction intentionally',level:'Runner',status:'',note:''},
+  {concept:'Gross Motor — Body Control',age:'2–3',milestone:'Jumps off a step with both feet together; jumps forward',level:'Jumper',status:'',note:''},
+  {concept:'Gross Motor — Body Control',age:'3–4',milestone:'Hops on one foot 2–3 times; gallops and skips with one-sided pattern',level:'Hopper',status:'',note:''},
+  {concept:'Gross Motor — Body Control',age:'3–4',milestone:'Pedals a tricycle; catches a large ball with arms extended',level:'Tricyclist',status:'',note:''},
+  {concept:'Gross Motor — Body Control',age:'4–5',milestone:'Skips on alternating feet; balances on one foot for 5+ seconds',level:'Skipper',status:'',note:''},
+  {concept:'Gross Motor — Body Control',age:'4–5',milestone:'Throws and catches a ball with reasonable accuracy; kicks a moving ball',level:'Ball Handler',status:'',note:''},
+  {concept:'Fine Motor & Hand Skills',age:'0–1',milestone:'Grasps objects placed in palm (palmar grasp); transfers object hand to hand',level:'Palmar Grasper',status:'',note:''},
+  {concept:'Fine Motor & Hand Skills',age:'0–1',milestone:'Develops pincer grasp — picks up small objects with thumb and index finger',level:'Pincer User',status:'',note:''},
+  {concept:'Fine Motor & Hand Skills',age:'1–2',milestone:'Stacks 4+ blocks; turns pages; puts shapes into a shape-sorter',level:'Stacker & Sorter',status:'',note:''},
+  {concept:'Fine Motor & Hand Skills',age:'2–3',milestone:'Uses a spoon to self-feed with minimal spilling; strings large beads',level:'Self-Feeder',status:'',note:''},
+  {concept:'Fine Motor & Hand Skills',age:'2–3',milestone:'Holds crayon with functional grip; snips paper with safety scissors',level:'Tool User',status:'',note:''},
+  {concept:'Fine Motor & Hand Skills',age:'3–4',milestone:'Draws a cross and a circle on request; cuts along a straight line',level:'Controlled Cutter',status:'',note:''},
+  {concept:'Fine Motor & Hand Skills',age:'4–5',milestone:'Uses tripod grip on pencil; buttons and unbuttons clothing independently',level:'Tripod Writer',status:'',note:''},
+  {concept:'Dance & Expressive Movement',age:'0–1',milestone:'Bounces or sways in response to music when held; mirrors facial expressions',level:'Rhythm Responder',status:'',note:''},
+  {concept:'Dance & Expressive Movement',age:'1–2',milestone:'Bounces and sways spontaneously to music; claps and stamps to a beat',level:'Spontaneous Dancer',status:'',note:''},
+  {concept:'Dance & Expressive Movement',age:'2–3',milestone:'Imitates simple action songs with body movements (head-shoulders-knees)',level:'Action Song Mimer',status:'',note:''},
+  {concept:'Dance & Expressive Movement',age:'3–4',milestone:'Performs a short 4-movement sequence from memory (Bharatanatyam-inspired basic adavus)',level:'Sequence Mover',status:'',note:''},
+  {concept:'Dance & Expressive Movement',age:'4–5',milestone:'Executes aramandi (demi-plie) stance; performs a simple 8-beat movement phrase',level:'Classical Movement Beginner',status:'',note:''},
+  {concept:'Body Awareness & Yoga',age:'1–2',milestone:'Points to named body parts on self and on a toy or doll',level:'Body Part Namer',status:'',note:''},
+  {concept:'Body Awareness & Yoga',age:'2–3',milestone:'Attempts cat-cow stretch and child\'s pose following simple verbal cues',level:'Yoga Imitator',status:'',note:''},
+  {concept:'Body Awareness & Yoga',age:'3–4',milestone:'Holds tree pose (vrikshasana) for 3 seconds with wall support; names 3 yoga poses',level:'Balance Seeker',status:'',note:''},
+  {concept:'Body Awareness & Yoga',age:'4–5',milestone:'Completes a 5-pose sun salutation sequence with verbal prompts; practises belly breathing',level:'Mini Yogi',status:'',note:''},
+]);
+
+const CPS_ROWS=mkrows([
+  {concept:'Curiosity & Exploration',age:'0–1',milestone:'Mouthing, banging, and dropping objects to observe cause-and-effect',level:'Sensory Investigator',status:'',note:''},
+  {concept:'Curiosity & Exploration',age:'0–1',milestone:'Looks for a partially hidden object — early object permanence (6–8 months)',level:'Object Seeker',status:'',note:''},
+  {concept:'Curiosity & Exploration',age:'1–2',milestone:'Experiments with filling and emptying containers repeatedly',level:'Container Experimenter',status:'',note:''},
+  {concept:'Curiosity & Exploration',age:'1–2',milestone:'Uses a tool (spoon, stick) to retrieve an out-of-reach object',level:'Tool User',status:'',note:''},
+  {concept:'Curiosity & Exploration',age:'2–3',milestone:'Asks "what?" and "why?" questions about everyday phenomena',level:'Question Asker',status:'',note:''},
+  {concept:'Curiosity & Exploration',age:'3–4',milestone:'Sustains investigation of one open-ended problem for 5+ minutes',level:'Sustained Investigator',status:'',note:''},
+  {concept:'Curiosity & Exploration',age:'4–5',milestone:'Generates 3+ different ideas for how to use a single object (alternative uses)',level:'Divergent Thinker',status:'',note:''},
+  {concept:'Planning & Executive Function',age:'1–2',milestone:'Selects one toy from a group to achieve a specific play goal',level:'Early Planner',status:'',note:''},
+  {concept:'Planning & Executive Function',age:'2–3',milestone:'Completes a 3–4 piece inset puzzle through trial and error',level:'Trial & Error Solver',status:'',note:''},
+  {concept:'Planning & Executive Function',age:'2–3',milestone:'Holds a simple sorting rule in mind (red pieces here, blue there) for 2–3 minutes',level:'Rule Holder',status:'',note:''},
+  {concept:'Planning & Executive Function',age:'3–4',milestone:'Plans a block building before starting ("I\'m making a tall tower with a gate")',level:'Intentional Builder',status:'',note:''},
+  {concept:'Planning & Executive Function',age:'3–4',milestone:'Completes a 6–8 piece jigsaw using logical piece selection',level:'Puzzle Solver',status:'',note:''},
+  {concept:'Planning & Executive Function',age:'4–5',milestone:'Identifies a problem, tries two different solutions, and selects the one that works',level:'Systematic Solver',status:'',note:''},
+  {concept:'Planning & Executive Function',age:'4–5',milestone:'Inhibits first impulse to try a more effective strategy when prompted',level:'Flexible Thinker',status:'',note:''},
+  {concept:'Symbolic & Imaginative Play',age:'1–2',milestone:'Uses one object to represent another in simple pretend play (block as phone)',level:'Symbol User',status:'',note:''},
+  {concept:'Symbolic & Imaginative Play',age:'2–3',milestone:'Creates a sustained pretend scenario with roles (shops, doctors, cooking)',level:'Role Player',status:'',note:''},
+  {concept:'Symbolic & Imaginative Play',age:'3–4',milestone:'Invents a narrative with characters, problem, and resolution in imaginative play',level:'Story Constructor',status:'',note:''},
+  {concept:'Symbolic & Imaginative Play',age:'4–5',milestone:'Adapts the play narrative when new elements are introduced (flexible story updating)',level:'Adaptive Narrator',status:'',note:''},
+  {concept:'Tinkering & STEM Thinking',age:'2–3',milestone:'Combines loose parts (ramps, tubes, balls) to make something happen',level:'Tinkerer',status:'',note:''},
+  {concept:'Tinkering & STEM Thinking',age:'3–4',milestone:'Makes a prediction before a simple experiment ("I think it will sink")',level:'Predictor',status:'',note:''},
+  {concept:'Tinkering & STEM Thinking',age:'3–4',milestone:'Tests prediction and describes what actually happened vs what was expected',level:'Observer Tester',status:'',note:''},
+  {concept:'Tinkering & STEM Thinking',age:'4–5',milestone:'Re-designs a construction after an initial failure ("it fell, let me try wider base")',level:'Iterative Designer',status:'',note:''},
+]);
+
+const SEL_ROWS=mkrows([
+  {concept:'Self-Awareness',age:'0–1',milestone:'Recognises own reflection in mirror with interest or smile (6–9 months)',level:'Self Recogniser',status:'',note:''},
+  {concept:'Self-Awareness',age:'1–2',milestone:'Uses own name; points to self when asked "where\'s [name]?"',level:'Name Claimer',status:'',note:''},
+  {concept:'Self-Awareness',age:'2–3',milestone:'Identifies and names basic emotions (happy, sad, angry, scared) in self',level:'Emotion Namer',status:'',note:''},
+  {concept:'Self-Awareness',age:'3–4',milestone:'Describes own strengths and interests ("I\'m good at drawing")',level:'Strengths Identifier',status:'',note:''},
+  {concept:'Self-Awareness',age:'4–5',milestone:'Notices own emotional state before it escalates; says "I feel..." unprompted',level:'Emotional Reporter',status:'',note:''},
+  {concept:'Self-Management & Regulation',age:'0–1',milestone:'Is soothed by familiar caregiver voice, touch, or rocking (co-regulation)',level:'Co-Regulated',status:'',note:''},
+  {concept:'Self-Management & Regulation',age:'1–2',milestone:'Uses a comfort object or routine to self-soothe during transitions',level:'Transition Coper',status:'',note:''},
+  {concept:'Self-Management & Regulation',age:'2–3',milestone:'Waits for a short period (30 seconds) for a desired item when prompted',level:'Impulse Controller',status:'',note:''},
+  {concept:'Self-Management & Regulation',age:'2–3',milestone:'Uses a simple calming strategy (hug, squeeze toy, deep breath) when dysregulated',level:'Calming Strategist',status:'',note:''},
+  {concept:'Self-Management & Regulation',age:'3–4',milestone:'Completes a non-preferred task before a preferred one with minimal protest',level:'Delayed Gratifier',status:'',note:''},
+  {concept:'Self-Management & Regulation',age:'4–5',milestone:'Identifies body signals of strong emotion (tight tummy, hot face) and uses a coping tool',level:'Body-Aware Regulator',status:'',note:''},
+  {concept:'Social Awareness & Empathy',age:'0–1',milestone:'Social smile at caregiver (6–8 weeks); shows joint attention by following a point',level:'Social Smiler',status:'',note:''},
+  {concept:'Social Awareness & Empathy',age:'1–2',milestone:'Shows concern when another person cries; offers comfort object to them',level:'Early Empathiser',status:'',note:''},
+  {concept:'Social Awareness & Empathy',age:'2–3',milestone:'Recognises emotions in others from facial expressions and body language',level:'Emotion Reader',status:'',note:''},
+  {concept:'Social Awareness & Empathy',age:'3–4',milestone:'Considers another child\'s perspective in conflict ("she is sad because I took her toy")',level:'Perspective Taker',status:'',note:''},
+  {concept:'Social Awareness & Empathy',age:'4–5',milestone:'Shows understanding that others may feel differently than oneself (early theory of mind)',level:'Theory of Mind Holder',status:'',note:''},
+  {concept:'Relationship Skills',age:'0–1',milestone:'Initiates interaction through eye contact, smiling, and vocalisation with caregiver',level:'Social Initiator',status:'',note:''},
+  {concept:'Relationship Skills',age:'1–2',milestone:'Engages in reciprocal back-and-forth play (peek-a-boo, rolling a ball)',level:'Reciprocal Player',status:'',note:''},
+  {concept:'Relationship Skills',age:'2–3',milestone:'Plays alongside peers (parallel play); occasionally shares or takes turns with prompting',level:'Parallel Player',status:'',note:''},
+  {concept:'Relationship Skills',age:'3–4',milestone:'Initiates cooperative play; negotiates roles and simple rules with peers',level:'Cooperative Player',status:'',note:''},
+  {concept:'Relationship Skills',age:'4–5',milestone:'Resolves minor peer conflicts with words before adult intervention is needed',level:'Conflict Resolver',status:'',note:''},
+  {concept:'Responsible Decision Making',age:'2–3',milestone:'Makes simple choice between two options and follows through on it',level:'Choice Maker',status:'',note:''},
+  {concept:'Responsible Decision Making',age:'3–4',milestone:'Understands that actions have consequences; says sorry with meaning',level:'Consequence Understander',status:'',note:''},
+  {concept:'Responsible Decision Making',age:'4–5',milestone:'Considers the effect of an action on others before acting ("that might hurt him")',level:'Ethical Reasoner',status:'',note:''},
+  {concept:'Cultural & Spiritual Identity',age:'1–2',milestone:'Participates with joy in family rituals (puja, festivals, kolam) through imitation',level:'Ritual Joiner',status:'',note:''},
+  {concept:'Cultural & Spiritual Identity',age:'2–3',milestone:'Names own family, community, and cultural traditions when asked',level:'Identity Namer',status:'',note:''},
+  {concept:'Cultural & Spiritual Identity',age:'3–4',milestone:'Shows pride in own heritage; shows curiosity about others\' traditions',level:'Cultural Explorer',status:'',note:''},
+  {concept:'Cultural & Spiritual Identity',age:'4–5',milestone:'Articulates one thing that makes own family or culture special',level:'Identity Narrator',status:'',note:''},
+]);
+
+const MINDSETS_ROWS=mkrows([
+  // HEAD — Openness to Experience
+  {concept:'HEAD · Openness to Experience',age:'0–1',milestone:'Accepts new sensory inputs (textures, sounds, faces) without distress after brief settling',level:'Sensory Openness',status:'',note:'Try: new fabric, new voice, new rattle sound each week'},
+  {concept:'HEAD · Openness to Experience',age:'1–2',milestone:'Willingly touches or mouths a new food or material after adult models it',level:'Sensory Explorer',status:'',note:'Try: "Let\'s both try it!"'},
+  {concept:'HEAD · Openness to Experience',age:'2–3',milestone:'Agrees to try one new thing each week (food, route, song, game) — even briefly',level:'Willing Tryer',status:'',note:'Language: "You gave it a try!" • "It\'s okay if you don\'t like it after."'},
+  {concept:'HEAD · Openness to Experience',age:'3–4',milestone:'Tries a new activity with minimal prompting; can say "I don\'t like it" without full refusal to try',level:'Open Adventurer',status:'',note:'Rotate parks, books, play materials weekly'},
+  {concept:'HEAD · Openness to Experience',age:'4–5',milestone:'Initiates trying something unfamiliar on own; reflects ("I wasn\'t sure but I liked it")',level:'Curious Self-Starter',status:'',note:''},
+  // HEAD — Divergent Thinking
+  {concept:'HEAD · Divergent Thinking',age:'0–1',milestone:'Explores a single object in multiple ways — mouthing, banging, shaking, dropping',level:'Multi-Mode Explorer',status:'',note:''},
+  {concept:'HEAD · Divergent Thinking',age:'1–2',milestone:'Uses one object as another in simple play (block as phone, cup as hat)',level:'Early Symbol Maker',status:'',note:'Offer loose parts: boxes, cups, scarves, spoons'},
+  {concept:'HEAD · Divergent Thinking',age:'2–3',milestone:'Suggests 2 different uses for a single object when asked "what else could this be?"',level:'Idea Generator',status:'',note:'Language: "I never thought of that!"'},
+  {concept:'HEAD · Divergent Thinking',age:'3–4',milestone:'Generates 3+ different ideas for a box, stick, or scarf in open-ended play',level:'Flexible Thinker',status:'',note:'Open-ended art without templates; avoid "colour inside the lines"'},
+  {concept:'HEAD · Divergent Thinking',age:'4–5',milestone:'In play or art, invents a novel solution or use that surprises even the adult',level:'Original Thinker',status:'',note:'Language: "Can you think of another way?"'},
+  // HEAD — Sense of Wonder
+  {concept:'HEAD · Sense of Wonder',age:'0–1',milestone:'Stills and attends to a natural stimulus — moving leaves, water, light/shadow',level:'Wonder Attender',status:'',note:'Hold near a window; let her watch rain or rustling leaves'},
+  {concept:'HEAD · Sense of Wonder',age:'1–2',milestone:'Points at insects, clouds, moon, or animals with clear delight and vocalisation',level:'Wonder Pointer',status:'',note:'Don\'t rush — pause and look together'},
+  {concept:'HEAD · Sense of Wonder',age:'2–3',milestone:'Watches ants, shadows, or puddles for 2+ minutes without redirection',level:'Patient Observer',status:'',note:'Language: "I wonder why…" — do NOT immediately give the answer'},
+  {concept:'HEAD · Sense of Wonder',age:'3–4',milestone:'Asks unprompted "why" or "how" questions about natural phenomena',level:'Nature Questioner',status:'',note:'Activities: nature walks, stargazing, puddle watching'},
+  {concept:'HEAD · Sense of Wonder',age:'4–5',milestone:'Initiates observation moments — stops and points out something beautiful or strange to share',level:'Wonder Initiator',status:'',note:'Language: "What do you think?" — hold the silence'},
+  // HEAD — Judgement
+  {concept:'HEAD · Judgement',age:'0–1',milestone:'Pauses and checks caregiver\'s face before touching an unfamiliar object (social referencing)',level:'Social Referencer',status:'',note:''},
+  {concept:'HEAD · Judgement',age:'1–2',milestone:'Hesitates before a physically risky action (edge of step, hot cup) when warned once',level:'Cause-Effect Feeler',status:'',note:''},
+  {concept:'HEAD · Judgement',age:'2–3',milestone:'Answers "what might happen if...?" about a simple story with a reasonable consequence',level:'Consequence Guesser',status:'',note:'Language: "How do you think the rabbit felt?"'},
+  {concept:'HEAD · Judgement',age:'3–4',milestone:'Discusses a story character\'s decision and offers a different choice the character could have made',level:'Alternative Thinker',status:'',note:'Language: "What makes you think that?"'},
+  {concept:'HEAD · Judgement',age:'4–5',milestone:'Before acting, pauses to consider consequences ("if I do this, then...") with verbal prompting',level:'Reflective Decision Maker',status:'',note:''},
+  // HEAD — Reflective
+  {concept:'HEAD · Reflective',age:'0–1',milestone:'Quiets and attends when a caregiver narrates what just happened ("we went outside, didn\'t we?")',level:'Experience Listener',status:'',note:''},
+  {concept:'HEAD · Reflective',age:'1–2',milestone:'Points to photo or object from earlier in the day when prompted',level:'Memory Pointer',status:'',note:''},
+  {concept:'HEAD · Reflective',age:'2–3',milestone:'Responds to a bedtime question ("what made you smile today?") with at least one word or gesture',level:'Day Reflector',status:'',note:'Even one sentence is enough. Activities: bedtime "rose & thorn"'},
+  {concept:'HEAD · Reflective',age:'3–4',milestone:'Recounts something that happened and how they felt about it ("I felt angry when...")',level:'Feeling Reflector',status:'',note:'Language: "What was hard today?"'},
+  {concept:'HEAD · Reflective',age:'4–5',milestone:'Identifies what they would do differently next time without prompting',level:'Learning Reflector',status:'',note:'Language: "What did you learn about yourself today?"'},
+  // HANDS — Agency
+  {concept:'HANDS · Agency',age:'0–1',milestone:'Reaches intentionally toward a preferred toy or person; turns away from unwanted input',level:'Preference Expresser',status:'',note:''},
+  {concept:'HANDS · Agency',age:'1–2',milestone:'Makes a clear choice between two offered objects and follows through on it',level:'Choice Maker',status:'',note:'Offer meaningful choices: "red cup or blue cup?"'},
+  {concept:'HANDS · Agency',age:'2–3',milestone:'Initiates a self-chosen activity and sustains it for 5+ minutes',level:'Self-Directed Player',status:'',note:'Language: "You decided." • "What\'s your plan?"'},
+  {concept:'HANDS · Agency',age:'3–4',milestone:'Helps plan a small family event (choosing a picnic food, choosing a story) and sees it through',level:'Mini Planner',status:'',note:'Let her help plan small things — even "what shall we do after lunch?"'},
+  {concept:'HANDS · Agency',age:'4–5',milestone:'Sets a small personal goal, takes steps toward it, and reports back on outcome',level:'Goal Setter',status:'',note:''},
+  // HANDS — Discipline
+  {concept:'HANDS · Discipline',age:'0–1',milestone:'Participates in a consistent daily rhythm (wake, feed, play, sleep) with predictable cues',level:'Rhythm Follower',status:'',note:''},
+  {concept:'HANDS · Discipline',age:'1–2',milestone:'Puts one type of toy back before getting the next, with adult guidance',level:'Tidy Helper',status:'',note:''},
+  {concept:'HANDS · Discipline',age:'2–3',milestone:'Completes a simple daily task (carry plate to sink, water a plant) consistently without reminder',level:'Task Completer',status:'',note:'Language: "You finished what you started." Focus on consistency not perfection.'},
+  {concept:'HANDS · Discipline',age:'3–4',milestone:'Tidies a space or finishes a task even when not in the mood, with gentle reminder',level:'Persistent Finisher',status:'',note:'Activities: put toys away after play, carry own bag'},
+  {concept:'HANDS · Discipline',age:'4–5',milestone:'Maintains a simple daily responsibility (watering plants, feeding a pet) for one full week unprompted',level:'Responsible Keeper',status:'',note:''},
+  // HEART — Gratitude
+  {concept:'HEART · Gratitude',age:'0–1',milestone:'Makes eye contact and smiles at caregiver after being fed, held, or comforted',level:'Relational Receiver',status:'',note:''},
+  {concept:'HEART · Gratitude',age:'1–2',milestone:'Waves or vocalises "thank you" when prompted after receiving something',level:'Prompted Thanker',status:'',note:''},
+  {concept:'HEART · Gratitude',age:'2–3',milestone:'Says thank you spontaneously (unprompted) in familiar situations',level:'Natural Thanker',status:'',note:'Activities: thank the cook, cleaner, grandparent. Language: "Who helped you today?"'},
+  {concept:'HEART · Gratitude',age:'3–4',milestone:'Participates in a daily gratitude ritual — names one thing they are glad for',level:'Gratitude Practicer',status:'',note:'Daily ritual: morning or bedtime, even one sentence'},
+  {concept:'HEART · Gratitude',age:'4–5',milestone:'Notices and names kindness in others unprompted ("Paati made my favourite food")',level:'Gratitude Noticer',status:'',note:''},
+  // HEART — Self-Compassion
+  {concept:'HEART · Self-Compassion',age:'0–1',milestone:'Is soothable after distress; settles back to calm with caregiver support',level:'Settles with Support',status:'',note:''},
+  {concept:'HEART · Self-Compassion',age:'1–2',milestone:'Accepts comfort after a fall or frustration without prolonged inconsolable state',level:'Comfort Accepter',status:'',note:'Avoid: "Be careful!" / "See what happened?" after spills'},
+  {concept:'HEART · Self-Compassion',age:'2–3',milestone:'After a mistake or spill, moves toward clean-up rather than collapse ("oops, let\'s fix it")',level:'Recovery Mover',status:'',note:'Language: "Everyone makes mistakes." • "Oops. Let\'s clean it up."'},
+  {concept:'HEART · Self-Compassion',age:'3–4',milestone:'Voices self-compassionate statement after failure ("it\'s okay, I\'ll try again") with modelling',level:'Kind Self-Talker',status:'',note:''},
+  {concept:'HEART · Self-Compassion',age:'4–5',milestone:'Distinguishes between "I made a mistake" and "I am bad" — doesn\'t globalise failure',level:'Error Separater',status:'',note:'Language: "You made a mistake. That\'s different from being a bad person."'},
+  // HEART — Empathy
+  {concept:'HEART · Empathy',age:'0–1',milestone:'Cries or becomes distressed in response to another infant crying (emotional contagion)',level:'Emotion Receiver',status:'',note:''},
+  {concept:'HEART · Empathy',age:'1–2',milestone:'Offers a comfort object or pat to another person who is visibly upset',level:'Comfort Giver',status:'',note:''},
+  {concept:'HEART · Empathy',age:'2–3',milestone:'Names the emotion a book character is feeling from facial expression or context',level:'Emotion Reader',status:'',note:'Activities: talk about emotions in books; care for dolls/stuffed animals'},
+  {concept:'HEART · Empathy',age:'3–4',milestone:'Asks "are you okay?" or "does that hurt?" when another person is hurt or sad',level:'Empathy Asker',status:'',note:'Language: "How is he feeling?" • "What could help?"'},
+  {concept:'HEART · Empathy',age:'4–5',milestone:'Adjusts own behaviour based on noticing another person\'s emotional state',level:'Empathy Actor',status:'',note:''},
+  // SELF — Self-Awareness
+  {concept:'SELF · Self-Awareness',age:'0–1',milestone:'Distinguishes own hands and feet as part of self through mouthing and visual tracking',level:'Body Discoverer',status:'',note:''},
+  {concept:'SELF · Self-Awareness',age:'1–2',milestone:'Recognises self in mirror; uses own name or "me" to refer to self',level:'Self Recogniser',status:'',note:''},
+  {concept:'SELF · Self-Awareness',age:'2–3',milestone:'States clear preferences ("I like..." / "I don\'t like...") across food, play, and stories',level:'Preference Knower',status:'',note:'Activities: "What do you enjoy?" Language: "You seem proud of that."'},
+  {concept:'SELF · Self-Awareness',age:'3–4',milestone:'Identifies one thing they are good at and one thing that feels hard for them',level:'Strength Mapper',status:'',note:'Language: "What are you learning?"'},
+  {concept:'SELF · Self-Awareness',age:'4–5',milestone:'Describes own character ("I\'m someone who loves music / gets frustrated when...") in simple terms',level:'Self Narrator',status:'',note:''},
+  // SELF — Authenticity
+  {concept:'SELF · Authenticity',age:'0–1',milestone:'Expresses clear genuine emotions — delight, discomfort, preference — without suppression',level:'Genuine Expresser',status:'',note:''},
+  {concept:'SELF · Authenticity',age:'1–2',milestone:'Resists unwanted food, touch, or activity clearly; caregiver respects reasonable refusals',level:'Boundary Holder',status:'',note:'Respect reasonable likes and dislikes'},
+  {concept:'SELF · Authenticity',age:'2–3',milestone:'Asserts a genuine opinion even when it differs from the adult\'s ("I don\'t think so")',level:'Opinion Holder',status:'',note:'Ask for opinions often. Language: "It\'s okay to like different things."'},
+  {concept:'SELF · Authenticity',age:'3–4',milestone:'Chooses own style in art, dress-up, or play without deferring entirely to peers or adults',level:'Own-Style Chooser',status:'',note:''},
+  {concept:'SELF · Authenticity',age:'4–5',milestone:'Maintains a genuine preference or opinion under mild peer pressure or adult suggestion',level:'Conviction Holder',status:'',note:''},
+  // SELF — Resilience
+  {concept:'SELF · Resilience',age:'0–1',milestone:'Returns to exploration after a brief startle or mild frustration with caregiver support',level:'Supported Recoverer',status:'',note:''},
+  {concept:'SELF · Resilience',age:'1–2',milestone:'Attempts a physical task (climbing, stacking) multiple times after it fails',level:'Persistent Attempter',status:'',note:'Activities: towers that fall, ramps that don\'t work'},
+  {concept:'SELF · Resilience',age:'2–3',milestone:'Takes a short breath and tries again on a frustrating puzzle or task with minimal adult prompting',level:'Try-Again Mover',status:'',note:'Language: "That was tricky." • "Let\'s try again."'},
+  {concept:'SELF · Resilience',age:'3–4',milestone:'Uses a verbal strategy after failure ("I\'ll do it differently this time")',level:'Strategy Finder',status:'',note:'Activities: puzzles slightly above ability; building challenges'},
+  {concept:'SELF · Resilience',age:'4–5',milestone:'Recovers from a setback within a reasonable time and re-engages with the challenge independently',level:'Independent Recoverer',status:'',note:''},
+  // SELF — Positive Detachment
+  {concept:'SELF · Positive Detachment',age:'0–1',milestone:'Transitions between activities without prolonged distress when caregiver provides a cue',level:'Transition Coper',status:'',note:''},
+  {concept:'SELF · Positive Detachment',age:'1–2',milestone:'Accepts the end of a preferred activity with a brief protest that settles within 2 minutes',level:'Brief Mourner',status:'',note:''},
+  {concept:'SELF · Positive Detachment',age:'2–3',milestone:'Loses a simple game or doesn\'t get a turn without a full meltdown',level:'Loss Accepter',status:'',note:'Language: "It\'s okay to feel sad." • "Let\'s see what comes next."'},
+  {concept:'SELF · Positive Detachment',age:'3–4',milestone:'Waits for a turn or delayed reward with a short distraction strategy',level:'Patient Waiter',status:'',note:'Activities: simple turn-taking games; waiting in queues'},
+  {concept:'SELF · Positive Detachment',age:'4–5',milestone:'Articulates "I\'m disappointed but it\'s okay" or equivalent after a genuine let-down',level:'Graceful Releaser',status:'',note:''},
+  // SOUL — Mindfulness
+  {concept:'SOUL · Mindfulness',age:'0–1',milestone:'Stills body and attends to a single sensory experience (rain sounds, warm water, breeze)',level:'Sensory Stiller',status:'',note:''},
+  {concept:'SOUL · Mindfulness',age:'1–2',milestone:'Pauses outdoor play to feel rain, grass, or sand with focused attention',level:'Texture Noticer',status:'',note:'Activities: feel rain, grass, sand; slow breathing with bubbles'},
+  {concept:'SOUL · Mindfulness',age:'2–3',milestone:'Participates in a 1–2 minute sensory pause (listen for bird sounds; feel the breeze)',level:'Quiet Attender',status:'',note:'Language: "What do you notice?" • Do not fill silences immediately'},
+  {concept:'SOUL · Mindfulness',age:'3–4',milestone:'Can take 3 slow belly breaths voluntarily when calm (not just when dysregulated)',level:'Breath Practiser',status:'',note:'Activities: bubbles to slow breath; watching a candle flame'},
+  {concept:'SOUL · Mindfulness',age:'4–5',milestone:'Independently pauses and notices the present moment ("the sky is so blue right now")',level:'Present Noticer',status:'',note:''},
+  // SOUL — Aesthetic Sensibility
+  {concept:'SOUL · Aesthetic Sensibility',age:'0–1',milestone:'Gazes intently at high-contrast patterns, faces, or natural light; tracks slowly moving beautiful objects',level:'Beauty Attender',status:'',note:''},
+  {concept:'SOUL · Aesthetic Sensibility',age:'1–2',milestone:'Shows clear delight at music, flowers, water, or light — laughs, points, vocalises',level:'Beauty Responder',status:'',note:''},
+  {concept:'SOUL · Aesthetic Sensibility',age:'2–3',milestone:'Points to something and says "pretty" or "beautiful" unprompted',level:'Beauty Namer',status:'',note:'Activities: flowers, music, art, rangoli. Notice sunset colours.'},
+  {concept:'SOUL · Aesthetic Sensibility',age:'3–4',milestone:'Answers "what do you find beautiful?" with a personal, specific answer',level:'Beauty Claimer',status:'',note:'Language: "What do YOU find beautiful?" — not "what is beautiful?"'},
+  {concept:'SOUL · Aesthetic Sensibility',age:'4–5',milestone:'Seeks out beauty — asks to stop and look, listen, or touch something aesthetically pleasing',level:'Beauty Seeker',status:'',note:''},
+  // SOUL — Spirituality
+  {concept:'SOUL · Spirituality',age:'0–1',milestone:'Is calm and attentive during lamp-lighting, chanting, or quiet family rituals',level:'Ritual Soaker',status:'',note:'For this age: spirituality = awe, connection, reverence — not doctrine'},
+  {concept:'SOUL · Spirituality',age:'1–2',milestone:'Imitates gestures of ritual (hands together, blowing out a lamp, watering a tulsi plant)',level:'Ritual Imitator',status:'',note:'Activities: lighting a lamp; sitting quietly under a tree; looking at the moon'},
+  {concept:'SOUL · Spirituality',age:'2–3',milestone:'Sits quietly in a natural or sacred space for 2+ minutes without needing entertainment',level:'Still Presencer',status:'',note:'Activities: temple visits, moongazing, sitting under a large tree'},
+  {concept:'SOUL · Spirituality',age:'3–4',milestone:'Expresses spontaneous awe ("it\'s SO big", "why is the sky so far?") about the natural world',level:'Awe Expresser',status:'',note:'Language: "Isn\'t it amazing that we\'re part of such a big world?"'},
+  {concept:'SOUL · Spirituality',age:'4–5',milestone:'Asks a genuine existential or wonder question ("where did I come from?", "will the moon always be there?")',level:'Deep Questioner',status:'',note:'Hold these questions with reverence — do not rush to answer'},
+  // SOUL — Tolerance for Boredom
+  {concept:'SOUL · Tolerance for Boredom',age:'0–1',milestone:'Lies contentedly without stimulation for 5+ minutes; self-entertains with hands, feet, ceiling',level:'Self-Content Rester',status:'',note:''},
+  {concept:'SOUL · Tolerance for Boredom',age:'1–2',milestone:'Plays alone with a single object for 5+ minutes without seeking adult entertainment',level:'Solo Player',status:'',note:''},
+  {concept:'SOUL · Tolerance for Boredom',age:'2–3',milestone:'Tolerates 10–15 minutes of unstructured time without requesting screens or adult-led play',level:'Unstructured Time Holder',status:'',note:'Leave 20–30 min daily of truly unstructured time. Language: "What would you like to do?"'},
+  {concept:'SOUL · Tolerance for Boredom',age:'3–4',milestone:'When told "there\'s nothing to do right now", generates own play within 5 minutes',level:'Boredom Transformer',status:'',note:'Avoid filling every quiet moment. Language: "Let\'s see what your imagination comes up with."'},
+  {concept:'SOUL · Tolerance for Boredom',age:'4–5',milestone:'Describes boredom as a feeling rather than a crisis; finds own meaningful activity from boredom',level:'Imagination Igniter',status:'',note:''},
+]);
+
+function defaultDomains(){
+  return [
+    {id:1,name:'Mathematics',icon:'🔢',color:0,rows:JSON.parse(JSON.stringify(MATH_ROWS))},
+    {id:2,name:'English',icon:'📖',color:2,rows:JSON.parse(JSON.stringify(ENGLISH_ROWS))},
+    {id:3,name:'Tamil',icon:'🌺',color:3,rows:JSON.parse(JSON.stringify(TAMIL_ROWS))},
+    {id:4,name:'Music',icon:'🎶',color:5,rows:JSON.parse(JSON.stringify(CARNATIC_ROWS))},
+    {id:5,name:'Visual Art',icon:'🎨',color:4,rows:JSON.parse(JSON.stringify(ART_ROWS))},
+    {id:6,name:'Movement',icon:'🏃',color:1,rows:JSON.parse(JSON.stringify(MOVEMENT_ROWS))},
+    {id:7,name:'Creative Problem Solving',icon:'🧩',color:0,rows:JSON.parse(JSON.stringify(CPS_ROWS))},
+    {id:8,name:'Socio-Emotional',icon:'💛',color:5,rows:JSON.parse(JSON.stringify(SEL_ROWS))},
+    {id:9,name:'Mindsets & Character',icon:'🌟',color:2,rows:JSON.parse(JSON.stringify(MINDSETS_ROWS))},
+  ];
+}
+
+function loadState(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(saved&&saved.domains&&saved.domains.length){
+      state.domains=saved.domains;
+      state.activeDomain=Math.min(saved.activeDomain||0,saved.domains.length-1);
+    } else {
+      state.domains=defaultDomains();
+    }
+  } catch(e){state.domains=defaultDomains();}
+  render();
+}
+
+function saveState(){
+  if(saveTimer)clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{
+    try{
+      localStorage.setItem(STORAGE_KEY,JSON.stringify({domains:state.domains,activeDomain:state.activeDomain}));
+      showToast('Saved! 🌿');
+    }catch(e){}
+  },600);
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg||'Saved! 🌿';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+function exportJSON(){
+  const data={exportedAt:new Date().toISOString(),version:2,domains:state.domains};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const date=new Date().toISOString().slice(0,10);
+  a.href=url;a.download='homeclub-backup-'+date+'.json';
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);URL.revokeObjectURL(url);
+  showToast('Exported! 📦');
+}
+
+function conceptColorIdx(domainColorIdx,ci){return(domainColorIdx+ci+1)%COLORS.length;}
+function computeStats(domain){
+  const done=domain.rows.filter(r=>r.status==='done').length;
+  const inprog=domain.rows.filter(r=>r.status==='in-progress').length;
+  const total=domain.rows.length;
+  return{done,inprog,total,pct:total?Math.round(done/total*100):0};
+}
+
+function renderNav(){
+  const nav=document.getElementById('domainsNav');
+  let h='';
+  state.domains.forEach((d,i)=>{
+    const c=COLORS[d.color%COLORS.length];
+    h+=`<div class="domain-tab${i===state.activeDomain?' active':''}" onclick="switchDomain(${i})">
+      <span class="dot" style="background:${c.dot}"></span>${d.icon} ${d.name}
+    </div>`;
+  });
+  h+=`<button class="btn btn-sm" onclick="openAddDomain()" style="border-style:dashed"><i class="ti ti-plus"></i> New</button>`;
+  nav.innerHTML=h;
+}
+
+function renderMain(){
+  const main=document.getElementById('mainContent');
+  if(!state.domains.length){
+    main.innerHTML=`<div class="card"><div class="empty-state"><i class="ti ti-books"></i><div class="etitle">No domains yet</div><p style="font-size:13px;color:#bbb;margin-bottom:1rem">Add your first learning domain to begin</p><button class="btn btn-primary" onclick="openAddDomain()"><i class="ti ti-plus"></i> Add domain</button></div></div>`;
+    return;
+  }
+  const domain=state.domains[state.activeDomain];
+  const c=COLORS[domain.color%COLORS.length];
+  const stats=computeStats(domain);
+  const concepts=[...new Set(domain.rows.map(r=>r.concept))];
+  const conceptIdx={};concepts.forEach((con,ci)=>conceptIdx[con]=ci);
+  const filtered=state.ageFilter==='all'?domain.rows:domain.rows.filter(r=>r.age===state.ageFilter);
+
+  let ageChips=`<div class="ages-row"><div class="age-chip${state.ageFilter==='all'?' active':''}" onclick="setAgeFilter('all')">All ages</div>`;
+  AGE_BANDS.forEach(a=>{ageChips+=`<div class="age-chip${state.ageFilter===a?' active':''}" onclick="setAgeFilter('${a}')">${a} yrs</div>`;});
+  ageChips+=`</div>`;
+
+  let rows='';
+  filtered.forEach(row=>{
+    const cc=COLORS[conceptColorIdx(domain.color,conceptIdx[row.concept]||0)];
+    const age=AGE_STYLE[row.age]||{bg:'#eee',text:'#555'};
+    const gi=domain.rows.indexOf(row);
+    const sIcon=row.status==='done'?'ti-check':row.status==='in-progress'?'ti-star':'ti-circle';
+    const sClass=row.status==='done'?'done':row.status==='in-progress'?'in-progress':'';
+    const safeNote=(row.note||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+    rows+=`<tr>
+      <td style="width:88px"><span class="age-badge" style="background:${age.bg};color:${age.text}">${row.age} yrs</span></td>
+      <td style="width:160px"><span class="concept-badge" style="background:${cc.bg};color:${cc.text};border:1px solid ${cc.border}">${row.concept}</span></td>
+      <td><div class="milestone-text">${row.milestone}</div><div class="level-tag">${row.level}</div></td>
+      <td style="width:60px" class="check-wrap"><button class="check-btn ${sClass}" onclick="cycleStatus(${domain.id},${gi})" title="Toggle status"><i class="ti ${sIcon}"></i></button></td>
+      <td style="width:210px"><textarea class="note-input" rows="1" placeholder="Add a note…" oninput="autoResize(this);saveNote(${domain.id},${gi},this.value)">${safeNote}</textarea></td>
+    </tr>`;
+  });
+
+  main.innerHTML=`<div class="card">
+    <div class="domain-header">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="domain-icon-wrap" style="background:${c.bg};border-color:${c.border}">${domain.icon}</div>
+        <div>
+          <div class="domain-title">${domain.name}</div>
+          <div class="domain-subtitle">${domain.rows.length} milestones · 5 age bands</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="text-align:right">
+          <div class="progress-label">${stats.pct}% complete</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${stats.pct}%"></div></div>
+        </div>
+        <button class="btn btn-sm" onclick="openEditDomain(${domain.id})"><i class="ti ti-edit"></i></button>
+        <button class="btn btn-sm btn-green" onclick="openAddRow(${domain.id})"><i class="ti ti-plus"></i> Milestone</button>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box stat-done"><div class="num">${stats.done}</div><div class="lbl">Achieved ✓</div></div>
+      <div class="stat-box stat-prog"><div class="num">${stats.inprog}</div><div class="lbl">In progress ✦</div></div>
+      <div class="stat-box stat-idle"><div class="num">${stats.total-stats.done-stats.inprog}</div><div class="lbl">Not started</div></div>
+    </div>
+    ${ageChips}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:88px">Age</th><th style="width:160px">Concept</th><th>Milestone</th><th style="width:60px;text-align:center">Done?</th><th style="width:210px">Notes</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=(el.scrollHeight)+'px';
+}
+
+function render(){renderNav();renderMain();requestAnimationFrame(()=>{document.querySelectorAll('.note-input').forEach(autoResize);});}
+function switchDomain(i){state.activeDomain=i;state.ageFilter='all';render();saveState();}
+function setAgeFilter(f){state.ageFilter=f;render();}
+
+function cycleStatus(domainId,rowIdx){
+  const domain=state.domains.find(d=>d.id===domainId);
+  const cycle={'':'in-progress','in-progress':'done','done':''};
+  domain.rows[rowIdx].status=cycle[domain.rows[rowIdx].status]||'';
+  render();saveState();
+}
+function saveNote(domainId,rowIdx,val){
+  const domain=state.domains.find(d=>d.id===domainId);
+  domain.rows[rowIdx].note=val;saveState();
+}
+
+function colorDots(sel){
+  return COLORS.map((c,i)=>`<div class="color-dot${i===sel?' sel':''}" onclick="selectColor(this,${i})" style="background:${c.dot}" title="${c.name}"></div>`).join('');
+}
+
+function openAddDomain(){
+  const m=document.getElementById('modalMount');
+  m._selIcon=ICONS[0];m._selColor=0;
+  m.innerHTML=`<div class="modal-overlay" onclick="closeIfOverlay(event)">
+    <div class="modal">
+      <h2>Add a new domain</h2>
+      <div class="sub">Create a subject area with its own progression</div>
+      <div class="form-row"><label>Domain name</label><input type="text" id="newDomainName" placeholder="e.g. Science & Nature" /></div>
+      <div class="form-row"><label>Choose an icon</label>
+        <div class="icon-grid">${ICONS.map((ic,i)=>`<div class="icon-opt${i===0?' selected':''}" onclick="selIcon(this,'${ic}')">${ic}</div>`).join('')}</div>
+      </div>
+      <div class="form-row"><label>Colour theme</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">${colorDots(0)}</div>
+      </div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="addDomain()"><i class="ti ti-plus"></i> Create</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function selIcon(el,icon){
+  document.querySelectorAll('.icon-opt').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('modalMount')._selIcon=icon;
+}
+function selectColor(el,ci){
+  document.querySelectorAll('.color-dot').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('modalMount')._selColor=ci;
+}
+function addDomain(){
+  const name=document.getElementById('newDomainName').value.trim();
+  if(!name)return;
+  const m=document.getElementById('modalMount');
+  state.domains.push({id:nextId++,name,icon:m._selIcon||ICONS[0],color:m._selColor||0,rows:[]});
+  state.activeDomain=state.domains.length-1;
+  closeModal();render();saveState();
+}
+
+function openAddRow(domainId){
+  const domain=state.domains.find(d=>d.id===domainId);
+  document.getElementById('modalMount').innerHTML=`<div class="modal-overlay" onclick="closeIfOverlay(event)">
+    <div class="modal">
+      <h2>Add a milestone</h2>
+      <div class="sub">New objective for ${domain.name}</div>
+      <div class="form-row"><label>Concept or topic</label><input type="text" id="newConcept" placeholder="e.g. Phonics" /></div>
+      <div class="form-row"><label>Age band</label>
+        <select id="newAge">${AGE_BANDS.map(a=>`<option value="${a}">${a} years</option>`).join('')}</select>
+      </div>
+      <div class="form-row"><label>Milestone description</label><textarea id="newMilestone" placeholder="Describe what the child can do…"></textarea></div>
+      <div class="form-row"><label>Level name (optional)</label><input type="text" id="newLevel" placeholder="e.g. Emergent Reader" /></div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="addRow(${domainId})"><i class="ti ti-plus"></i> Add</button>
+      </div>
+    </div>
+  </div>`;
+}
+function addRow(domainId){
+  const domain=state.domains.find(d=>d.id===domainId);
+  const concept=document.getElementById('newConcept').value.trim();
+  const age=document.getElementById('newAge').value;
+  const milestone=document.getElementById('newMilestone').value.trim();
+  const level=document.getElementById('newLevel').value.trim();
+  if(!milestone)return;
+  domain.rows.push({id:'r'+Date.now(),concept:concept||'General',age,milestone,level:level||'',status:'',note:''});
+  closeModal();render();saveState();
+}
+
+function openEditDomain(domainId){
+  const domain=state.domains.find(d=>d.id===domainId);
+  const m=document.getElementById('modalMount');
+  m._selIcon=domain.icon;m._selColor=domain.color;
+  m.innerHTML=`<div class="modal-overlay" onclick="closeIfOverlay(event)">
+    <div class="modal">
+      <h2>Edit domain</h2>
+      <div class="sub">Update ${domain.name}</div>
+      <div class="form-row"><label>Domain name</label><input type="text" id="editDomainName" value="${domain.name}" /></div>
+      <div class="form-row"><label>Icon</label>
+        <div class="icon-grid">${ICONS.map(ic=>`<div class="icon-opt${ic===domain.icon?' selected':''}" onclick="selIcon(this,'${ic}')">${ic}</div>`).join('')}</div>
+      </div>
+      <div class="form-row"><label>Colour</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">${colorDots(domain.color)}</div>
+      </div>
+      <div class="form-actions">
+        <button class="btn danger-btn" onclick="deleteDomain(${domainId})"><i class="ti ti-trash"></i> Delete</button>
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveEditDomain(${domainId})">Save</button>
+      </div>
+    </div>
+  </div>`;
+}
+function saveEditDomain(domainId){
+  const domain=state.domains.find(d=>d.id===domainId);
+  const m=document.getElementById('modalMount');
+  domain.name=document.getElementById('editDomainName').value.trim()||domain.name;
+  domain.icon=m._selIcon||domain.icon;
+  domain.color=m._selColor!==undefined?m._selColor:domain.color;
+  closeModal();render();saveState();
+}
+function deleteDomain(domainId){
+  if(!confirm('Delete this domain? All milestones will be lost.'))return;
+  state.domains=state.domains.filter(d=>d.id!==domainId);
+  state.activeDomain=Math.max(0,state.activeDomain-1);
+  closeModal();render();saveState();
+}
+
+function closeModal(){document.getElementById('modalMount').innerHTML='';}
+function closeIfOverlay(e){if(e.target.classList.contains('modal-overlay'))closeModal();}
+
+loadState();
+</script>
+</body>
+</html>
+
