@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Little Learner — Homeschool Tracker</title>
+<title>Home Club — Homeschool Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Andika:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <style>
@@ -12,82 +13,82 @@
   --pink-50:#fff0f5;--pink-100:#fdd8e8;--pink-200:#f9a8cc;--pink-400:#e8649a;--pink-600:#b83d70;
   --green-50:#f0faf3;--green-100:#d3f0db;--green-200:#a8ddb5;--green-400:#5cb87a;--green-600:#3a8a54;
 }
-body{font-family:'Andika',sans-serif;background:#fdf6f9;min-height:100vh}
+body{font-family:'Andika',sans-serif;background:#fdf6f9;min-height:100vh;font-size:15px}
 h1,h2,h3,.fredoka{font-family:'Fredoka',sans-serif}
-.app{padding:1.5rem;max-width:1150px;margin:0 auto}
-.topbar{background:#fff0f5;border:1.5px solid var(--pink-200);border-radius:18px;padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.app{padding:1.5rem;max-width:1200px;margin:0 auto}
+.topbar{background:#fff0f5;border:1.5px solid var(--pink-200);border-radius:18px;padding:1rem 1.4rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .topbar-left{display:flex;align-items:center;gap:12px}
-.logo-blob{width:46px;height:46px;border-radius:14px;background:var(--pink-400);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
-.topbar h1{font-size:23px;font-weight:600;color:var(--pink-600);font-family:'Fredoka',sans-serif}
-.topbar p{font-size:12px;color:var(--pink-400);margin-top:1px}
-.btn{font-family:'Andika',sans-serif;background:#fff;border:1.5px solid var(--pink-200);border-radius:20px;padding:7px 16px;font-size:13px;cursor:pointer;color:var(--pink-600);display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.logo-blob{width:48px;height:48px;border-radius:14px;background:var(--pink-400);display:flex;align-items:center;justify-content:center;font-size:25px;flex-shrink:0}
+.topbar h1{font-size:24px;font-weight:600;color:var(--pink-600);font-family:'Fredoka',sans-serif}
+.topbar p{font-size:13px;color:var(--pink-400);margin-top:1px}
+.btn{font-family:'Andika',sans-serif;background:#fff;border:1.5px solid var(--pink-200);border-radius:20px;padding:8px 17px;font-size:14px;cursor:pointer;color:var(--pink-600);display:inline-flex;align-items:center;gap:6px;transition:all .15s}
 .btn:hover{background:var(--pink-50);border-color:var(--pink-400)}
 .btn-green{background:var(--green-50);border-color:var(--green-200);color:var(--green-600)}
 .btn-green:hover{background:var(--green-100);border-color:var(--green-400)}
 .btn-primary{background:var(--pink-400);color:#fff;border-color:var(--pink-400);font-weight:500}
 .btn-primary:hover{background:var(--pink-600);border-color:var(--pink-600)}
-.btn-sm{padding:5px 12px;font-size:12px}
+.btn-sm{padding:6px 13px;font-size:13px}
 .domains-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center}
-.domain-tab{padding:7px 16px;border-radius:22px;font-size:13px;cursor:pointer;border:1.5px solid var(--pink-100);background:#fff;color:#888;transition:all .15s;display:flex;align-items:center;gap:7px;font-family:'Andika',sans-serif}
+.domain-tab{padding:8px 17px;border-radius:22px;font-size:14px;cursor:pointer;border:1.5px solid var(--pink-100);background:#fff;color:#888;transition:all .15s;display:flex;align-items:center;gap:7px;font-family:'Andika',sans-serif}
 .domain-tab:hover{border-color:var(--pink-200);background:var(--pink-50)}
 .domain-tab.active{border-color:var(--pink-400);background:var(--pink-50);color:var(--pink-600);font-weight:700}
 .domain-tab .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .card{background:#fff;border:1.5px solid var(--pink-100);border-radius:18px;overflow:hidden;margin-bottom:1rem}
-.domain-header{padding:1rem 1.25rem;background:var(--pink-50);border-bottom:1.5px solid var(--pink-100);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.domain-icon-wrap{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;border:1.5px solid var(--pink-200);background:#fff;flex-shrink:0}
-.domain-title{font-size:17px;font-weight:600;color:var(--pink-600);font-family:'Fredoka',sans-serif}
-.domain-subtitle{font-size:12px;color:var(--pink-400);margin-top:1px}
-.progress-bar{height:7px;background:var(--pink-100);border-radius:6px;overflow:hidden;margin-top:5px;width:110px}
+.domain-header{padding:1.1rem 1.4rem;background:var(--pink-50);border-bottom:1.5px solid var(--pink-100);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.domain-icon-wrap{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:23px;border:1.5px solid var(--pink-200);background:#fff;flex-shrink:0}
+.domain-title{font-size:18px;font-weight:600;color:var(--pink-600);font-family:'Fredoka',sans-serif}
+.domain-subtitle{font-size:13px;color:var(--pink-400);margin-top:2px}
+.progress-bar{height:7px;background:var(--pink-100);border-radius:6px;overflow:hidden;margin-top:5px;width:115px}
 .progress-fill{height:100%;border-radius:6px;background:var(--green-400);transition:width .5s}
-.progress-label{font-size:11px;color:var(--green-600)}
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:1rem 1.25rem;border-bottom:1.5px solid var(--pink-100)}
-.stat-box{border-radius:14px;padding:.75rem 1rem;text-align:center}
-.stat-box .num{font-size:24px;font-weight:600;font-family:'Fredoka',sans-serif}
-.stat-box .lbl{font-size:11px;margin-top:2px}
+.progress-label{font-size:12px;color:var(--green-600)}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:1.1rem 1.4rem;border-bottom:1.5px solid var(--pink-100)}
+.stat-box{border-radius:14px;padding:.8rem 1rem;text-align:center}
+.stat-box .num{font-size:25px;font-weight:600;font-family:'Fredoka',sans-serif}
+.stat-box .lbl{font-size:12px;margin-top:3px}
 .stat-done{background:var(--green-50)}.stat-done .num{color:var(--green-600)}.stat-done .lbl{color:var(--green-400)}
 .stat-prog{background:#fffbea}.stat-prog .num{color:#c0860a}.stat-prog .lbl{color:#c0860a}
 .stat-idle{background:var(--pink-50)}.stat-idle .num{color:var(--pink-400)}.stat-idle .lbl{color:var(--pink-400)}
-.ages-row{display:flex;gap:6px;flex-wrap:wrap;padding:.75rem 1.25rem .25rem}
-.age-chip{padding:4px 13px;border-radius:14px;font-size:12px;cursor:pointer;border:1.5px solid var(--pink-100);background:#fff;color:#999;font-family:'Andika',sans-serif;transition:all .15s}
+.ages-row{display:flex;gap:6px;flex-wrap:wrap;padding:.8rem 1.4rem .3rem}
+.age-chip{padding:5px 14px;border-radius:14px;font-size:13px;cursor:pointer;border:1.5px solid var(--pink-100);background:#fff;color:#999;font-family:'Andika',sans-serif;transition:all .15s}
 .age-chip:hover{border-color:var(--pink-200);background:var(--pink-50)}
 .age-chip.active{background:var(--green-400);border-color:var(--green-400);color:#fff;font-weight:700}
 .table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{padding:9px 12px;text-align:left;font-family:'Fredoka',sans-serif;font-size:13px;font-weight:500;color:var(--pink-600);border-bottom:1.5px solid var(--pink-100);background:var(--pink-50)}
-td{padding:10px 12px;border-bottom:1px solid var(--pink-50);vertical-align:top;color:#444;font-family:'Andika',sans-serif}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{padding:10px 13px;text-align:left;font-family:'Fredoka',sans-serif;font-size:14px;font-weight:500;color:var(--pink-600);border-bottom:1.5px solid var(--pink-100);background:var(--pink-50)}
+td{padding:11px 13px;border-bottom:1px solid var(--pink-50);vertical-align:top;color:#444;font-family:'Andika',sans-serif}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:#fffafb}
-.age-badge{display:inline-block;padding:3px 9px;border-radius:10px;font-size:11px;font-weight:700;font-family:'Fredoka',sans-serif;white-space:nowrap}
-.concept-badge{display:inline-block;padding:2px 9px;border-radius:9px;font-size:11px;font-family:'Andika',sans-serif;line-height:1.4}
-.milestone-text{font-size:13px;line-height:1.5;color:#333}
-.level-tag{font-size:11px;color:#aaa;margin-top:3px}
+.age-badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:700;font-family:'Fredoka',sans-serif;white-space:nowrap}
+.concept-badge{display:inline-block;padding:3px 10px;border-radius:9px;font-size:12px;font-family:'Andika',sans-serif;line-height:1.5;white-space:normal;word-break:break-word}
+.milestone-text{font-size:14px;line-height:1.6;color:#333}
+.level-tag{font-size:12px;color:#aaa;margin-top:4px}
 .check-wrap{text-align:center}
-.check-btn{width:30px;height:30px;border-radius:50%;border:2px solid var(--pink-200);background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .2s;color:#ccc;font-size:14px}
+.check-btn{width:32px;height:32px;border-radius:50%;border:2px solid var(--pink-200);background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .2s;color:#ccc;font-size:15px}
 .check-btn:hover{border-color:var(--green-400);color:var(--green-400)}
 .check-btn.done{background:var(--green-400);border-color:var(--green-400);color:#fff}
 .check-btn.in-progress{background:#f9c74f;border-color:#f9c74f;color:#fff}
-.note-input{width:100%;background:var(--pink-50);border:1.5px solid var(--pink-100);border-radius:10px;padding:6px 9px;font-size:12px;color:#444;font-family:'Andika',sans-serif;resize:none;min-height:34px;height:34px;line-height:1.5;overflow:hidden;transition:border .15s,background .15s}
+.note-input{width:100%;background:var(--pink-50);border:1.5px solid var(--pink-100);border-radius:10px;padding:7px 10px;font-size:13px;color:#444;font-family:'Andika',sans-serif;resize:none;min-height:36px;height:auto;line-height:1.55;overflow:hidden;white-space:pre-wrap;word-break:break-word;transition:border .15s,background .15s}
 .note-input:focus{outline:none;border-color:var(--pink-400);background:#fff}
 .modal-overlay{position:fixed;inset:0;background:rgba(180,80,120,.22);display:flex;align-items:center;justify-content:center;z-index:1000}
-.modal{background:#fff;border-radius:20px;border:2px solid var(--pink-100);width:440px;max-width:calc(100% - 2rem);padding:1.5rem;max-height:90vh;overflow-y:auto}
-.modal h2{font-size:19px;font-weight:600;color:var(--pink-600);margin-bottom:3px;font-family:'Fredoka',sans-serif}
-.modal .sub{font-size:13px;color:#aaa;margin-bottom:1.25rem}
-.form-row{margin-bottom:1rem}
-.form-row label{display:block;font-size:12px;font-weight:700;color:var(--pink-400);margin-bottom:4px;font-family:'Fredoka',sans-serif}
-.form-row input,.form-row select,.form-row textarea{width:100%;background:var(--pink-50);border:1.5px solid var(--pink-100);border-radius:12px;padding:9px 12px;font-size:13px;color:#333;font-family:'Andika',sans-serif;transition:border .15s}
+.modal{background:#fff;border-radius:20px;border:2px solid var(--pink-100);width:460px;max-width:calc(100% - 2rem);padding:1.6rem;max-height:90vh;overflow-y:auto}
+.modal h2{font-size:20px;font-weight:600;color:var(--pink-600);margin-bottom:3px;font-family:'Fredoka',sans-serif}
+.modal .sub{font-size:14px;color:#aaa;margin-bottom:1.3rem}
+.form-row{margin-bottom:1.1rem}
+.form-row label{display:block;font-size:13px;font-weight:700;color:var(--pink-400);margin-bottom:5px;font-family:'Fredoka',sans-serif}
+.form-row input,.form-row select,.form-row textarea{width:100%;background:var(--pink-50);border:1.5px solid var(--pink-100);border-radius:12px;padding:10px 13px;font-size:14px;color:#333;font-family:'Andika',sans-serif;transition:border .15s}
 .form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:var(--pink-400);background:#fff}
-.form-row textarea{resize:none;min-height:72px}
-.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:1.25rem;flex-wrap:wrap}
+.form-row textarea{resize:none;min-height:78px}
+.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:1.3rem;flex-wrap:wrap}
 .icon-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:6px}
-.icon-opt{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--pink-100);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .15s}
+.icon-opt{width:38px;height:38px;border-radius:10px;border:1.5px solid var(--pink-100);display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;transition:all .15s}
 .icon-opt:hover{border-color:var(--pink-400);background:var(--pink-50)}
 .icon-opt.selected{border-color:var(--pink-400);background:var(--pink-50)}
-.color-dot{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:border .15s}
+.color-dot{width:27px;height:27px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:border .15s}
 .color-dot.sel{border-color:#555}
 .empty-state{padding:3rem;text-align:center;color:var(--pink-400)}
-.empty-state i{font-size:40px;margin-bottom:.75rem;display:block;opacity:.4}
-.empty-state .etitle{font-size:17px;font-family:'Fredoka',sans-serif;font-weight:600;margin-bottom:6px;color:var(--pink-600)}
-.save-toast{position:fixed;bottom:20px;right:20px;background:var(--green-400);color:#fff;font-family:'Fredoka',sans-serif;font-size:14px;padding:8px 18px;border-radius:14px;opacity:0;transition:opacity .3s;z-index:2000;pointer-events:none}
+.empty-state i{font-size:42px;margin-bottom:.75rem;display:block;opacity:.4}
+.empty-state .etitle{font-size:18px;font-family:'Fredoka',sans-serif;font-weight:600;margin-bottom:6px;color:var(--pink-600)}
+.save-toast{position:fixed;bottom:20px;right:20px;background:var(--green-400);color:#fff;font-family:'Fredoka',sans-serif;font-size:15px;padding:9px 20px;border-radius:14px;opacity:0;transition:opacity .3s;z-index:2000;pointer-events:none}
 .save-toast.show{opacity:1}
 .danger-btn{color:#d44;border-color:#fcc}
 .danger-btn:hover{background:#fff5f5;border-color:#f99}
@@ -99,12 +100,11 @@ tr:hover td{background:#fffafb}
     <div class="topbar-left">
       <div class="logo-blob">🌱</div>
       <div>
-        <h1>Little Learner</h1>
+        <h1>Home Club</h1>
         <p>Homeschool milestone tracker · Ages 0–5</p>
       </div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-sm" onclick="importJSON()" title="Import from JSON backup"><i class="ti ti-upload"></i> Import</button>
       <button class="btn btn-sm btn-green" onclick="exportJSON()" title="Download all data as JSON"><i class="ti ti-download"></i> Export</button>
       <button class="btn btn-primary" onclick="openAddDomain()"><i class="ti ti-plus"></i> Add domain</button>
     </div>
@@ -503,7 +503,7 @@ function defaultDomains(){
     {id:1,name:'Mathematics',icon:'🔢',color:0,rows:JSON.parse(JSON.stringify(MATH_ROWS))},
     {id:2,name:'English',icon:'📖',color:2,rows:JSON.parse(JSON.stringify(ENGLISH_ROWS))},
     {id:3,name:'Tamil',icon:'🌺',color:3,rows:JSON.parse(JSON.stringify(TAMIL_ROWS))},
-    {id:4,name:'Carnatic Music',icon:'🎶',color:5,rows:JSON.parse(JSON.stringify(CARNATIC_ROWS))},
+    {id:4,name:'Music',icon:'🎶',color:5,rows:JSON.parse(JSON.stringify(CARNATIC_ROWS))},
     {id:5,name:'Visual Art',icon:'🎨',color:4,rows:JSON.parse(JSON.stringify(ART_ROWS))},
     {id:6,name:'Movement',icon:'🏃',color:1,rows:JSON.parse(JSON.stringify(MOVEMENT_ROWS))},
     {id:7,name:'Creative Problem Solving',icon:'🧩',color:0,rows:JSON.parse(JSON.stringify(CPS_ROWS))},
@@ -548,30 +548,10 @@ function exportJSON(){
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   const date=new Date().toISOString().slice(0,10);
-  a.href=url;a.download='little-learner-backup-'+date+'.json';
+  a.href=url;a.download='homeclub-backup-'+date+'.json';
   document.body.appendChild(a);a.click();
   document.body.removeChild(a);URL.revokeObjectURL(url);
   showToast('Exported! 📦');
-}
-
-function importJSON(){
-  const input=document.createElement('input');
-  input.type='file';input.accept='.json,application/json';
-  input.onchange=e=>{
-    const file=e.target.files[0];if(!file)return;
-    const reader=new FileReader();
-    reader.onload=ev=>{
-      try{
-        const data=JSON.parse(ev.target.result);
-        if(!data.domains||!Array.isArray(data.domains))throw new Error('Invalid format');
-        if(!confirm('This will replace all current data with the backup. Continue?'))return;
-        state.domains=data.domains;state.activeDomain=0;
-        saveState();render();showToast('Imported! 🌿');
-      }catch(err){alert('Could not read that file. Make sure it is a Little Learner JSON backup.');}
-    };
-    reader.readAsText(file);
-  };
-  document.body.appendChild(input);input.click();document.body.removeChild(input);
 }
 
 function conceptColorIdx(domainColorIdx,ci){return(domainColorIdx+ci+1)%COLORS.length;}
@@ -621,11 +601,11 @@ function renderMain(){
     const sClass=row.status==='done'?'done':row.status==='in-progress'?'in-progress':'';
     const safeNote=(row.note||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
     rows+=`<tr>
-      <td style="width:82px"><span class="age-badge" style="background:${age.bg};color:${age.text}">${row.age} yrs</span></td>
-      <td style="width:150px"><span class="concept-badge" style="background:${cc.bg};color:${cc.text};border:1px solid ${cc.border}">${row.concept}</span></td>
+      <td style="width:88px"><span class="age-badge" style="background:${age.bg};color:${age.text}">${row.age} yrs</span></td>
+      <td style="width:160px"><span class="concept-badge" style="background:${cc.bg};color:${cc.text};border:1px solid ${cc.border}">${row.concept}</span></td>
       <td><div class="milestone-text">${row.milestone}</div><div class="level-tag">${row.level}</div></td>
-      <td style="width:56px" class="check-wrap"><button class="check-btn ${sClass}" onclick="cycleStatus(${domain.id},${gi})" title="Toggle status"><i class="ti ${sIcon}"></i></button></td>
-      <td style="width:190px"><textarea class="note-input" rows="1" placeholder="Add a note…" oninput="autoResize(this);saveNote(${domain.id},${gi},this.value)">${safeNote}</textarea></td>
+      <td style="width:60px" class="check-wrap"><button class="check-btn ${sClass}" onclick="cycleStatus(${domain.id},${gi})" title="Toggle status"><i class="ti ${sIcon}"></i></button></td>
+      <td style="width:210px"><textarea class="note-input" rows="1" placeholder="Add a note…" oninput="autoResize(this);saveNote(${domain.id},${gi},this.value)">${safeNote}</textarea></td>
     </tr>`;
   });
 
@@ -655,7 +635,7 @@ function renderMain(){
     ${ageChips}
     <div class="table-wrap">
       <table>
-        <thead><tr><th style="width:82px">Age</th><th style="width:150px">Concept</th><th>Milestone</th><th style="width:56px;text-align:center">Done?</th><th style="width:190px">Notes</th></tr></thead>
+        <thead><tr><th style="width:88px">Age</th><th style="width:160px">Concept</th><th>Milestone</th><th style="width:60px;text-align:center">Done?</th><th style="width:210px">Notes</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>
