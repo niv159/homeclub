@@ -91,10 +91,31 @@ tr:hover td{background:#fffafb}
 .save-toast.show{opacity:1}
 .danger-btn{color:#d44;border-color:#fcc}
 .danger-btn:hover{background:#fff5f5;border-color:#f99}
+.login-screen{position:fixed;inset:0;background:#fdf6f9;display:none;align-items:center;justify-content:center;padding:1.5rem;z-index:3000}
+.login-card{background:#fff;border:2px solid var(--pink-100);border-radius:24px;padding:2.2rem 2rem;width:420px;max-width:100%;text-align:center;box-shadow:0 12px 44px rgba(184,61,112,.10)}
+.login-logo{width:64px;height:64px;border-radius:18px;background:var(--pink-400);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto .9rem}
+.login-card h1{font-size:28px;color:var(--pink-600);font-family:'Fredoka',sans-serif;font-weight:600}
+.login-sub{font-size:15px;color:var(--pink-400);margin-top:2px;margin-bottom:1.4rem}
+.login-users{display:flex;flex-direction:column;gap:8px;margin-bottom:.4rem}
+.login-user-chip{display:flex;align-items:center;justify-content:space-between;background:var(--pink-50);border:1.5px solid var(--pink-100);border-radius:14px;padding:11px 16px;transition:all .15s}
+.login-user-chip:hover{border-color:var(--pink-400);background:#fff}
+.login-user-chip .uname{flex:1;text-align:left;cursor:pointer;font-size:16px;color:var(--pink-600);font-family:'Fredoka',sans-serif}
+.login-user-chip i{color:var(--pink-200);cursor:pointer;font-size:16px;padding:4px;border-radius:8px}
+.login-user-chip i:hover{color:#d44;background:#fff5f5}
+.login-divider{display:flex;align-items:center;gap:10px;color:#bbb;font-size:13px;margin:1rem 0;font-family:'Andika',sans-serif}
+.login-divider:before,.login-divider:after{content:'';flex:1;height:1px;background:var(--pink-100)}
+.login-form{display:flex;gap:8px}
+.login-form input{flex:1;background:var(--pink-50);border:1.5px solid var(--pink-100);border-radius:14px;padding:12px 15px;font-size:15px;font-family:'Andika',sans-serif;color:#333}
+.login-form input:focus{outline:none;border-color:var(--pink-400);background:#fff}
+.login-form .btn-primary{white-space:nowrap}
+.login-note{font-size:12px;color:#bbb;margin-top:1rem;font-family:'Andika',sans-serif;line-height:1.5}
+.user-badge{display:inline-flex;align-items:center;gap:6px;background:var(--green-50);border:1.5px solid var(--green-200);color:var(--green-600);border-radius:20px;padding:7px 14px;font-size:14px;font-family:'Fredoka',sans-serif}
+.user-badge:empty{display:none}
 </style>
 </head>
 <body>
-<div class="app" id="app">
+<div class="login-screen" id="loginScreen"></div>
+<div class="app" id="app" style="display:none">
   <div class="topbar">
     <div class="topbar-left">
       <div class="logo-blob">🌱</div>
@@ -103,7 +124,9 @@ tr:hover td{background:#fffafb}
         <p>Homeschool milestone tracker · Ages 0–5</p>
       </div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <span class="user-badge" id="userBadge"></span>
+      <button class="btn btn-sm" onclick="switchUser()" title="Switch to a different person"><i class="ti ti-switch-horizontal"></i> Switch</button>
       <button class="btn btn-sm btn-green" onclick="exportJSON()" title="Download all data as JSON"><i class="ti ti-download"></i> Export</button>
       <button class="btn btn-primary" onclick="openAddDomain()"><i class="ti ti-plus"></i> Add domain</button>
     </div>
@@ -125,7 +148,14 @@ const COLORS=[
 const ICONS=['📐','🔢','🌍','🎨','🔬','📚','🎵','🏃','🌿','🧩','💬','⭐','🦋','🌈','🐝','🎭','🐣','🌸','🍎','🦊','🌻','🎯','🧸','🖍️'];
 const AGE_BANDS=['0–1','1–2','2–3','3–4','4–5'];
 const AGE_STYLE={'0–1':{bg:'#fff0f5',text:'#b83d70'},'1–2':{bg:'#fff4ee',text:'#b85520'},'2–3':{bg:'#f5f0ff',text:'#5e3db5'},'3–4':{bg:'#f0faf3',text:'#3a8a54'},'4–5':{bg:'#fffbea',text:'#a06a00'}};
-const STORAGE_KEY='homeclub_v2';
+const STORAGE_BASE='homeclub_v2';
+const USERS_KEY='homeclub_users';
+const LAST_USER_KEY='homeclub_lastUser';
+let currentUser=null;
+function storageKey(){return STORAGE_BASE+'__'+currentUser;}
+function getUsers(){try{return JSON.parse(localStorage.getItem(USERS_KEY))||[];}catch(e){return [];}}
+function saveUsers(list){localStorage.setItem(USERS_KEY,JSON.stringify(list));}
+function escHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 let state={activeDomain:0,domains:[],ageFilter:'all'};
 let nextId=200;
 let saveTimer=null;
@@ -513,7 +543,7 @@ function defaultDomains(){
 
 function loadState(){
   try{
-    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));
+    const saved=JSON.parse(localStorage.getItem(storageKey()));
     if(saved&&saved.domains&&saved.domains.length){
       state.domains=saved.domains;
       state.activeDomain=Math.min(saved.activeDomain||0,saved.domains.length-1);
@@ -528,7 +558,7 @@ function saveState(){
   if(saveTimer)clearTimeout(saveTimer);
   saveTimer=setTimeout(()=>{
     try{
-      localStorage.setItem(STORAGE_KEY,JSON.stringify({domains:state.domains,activeDomain:state.activeDomain}));
+      localStorage.setItem(storageKey(),JSON.stringify({domains:state.domains,activeDomain:state.activeDomain}));
       showToast('Saved! 🌿');
     }catch(e){}
   },600);
@@ -542,12 +572,13 @@ function showToast(msg){
 }
 
 function exportJSON(){
-  const data={exportedAt:new Date().toISOString(),version:2,domains:state.domains};
+  const data={exportedAt:new Date().toISOString(),version:2,user:currentUser,domains:state.domains};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   const date=new Date().toISOString().slice(0,10);
-  a.href=url;a.download='homeclub-backup-'+date+'.json';
+  const who=(currentUser||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'data';
+  a.href=url;a.download='homeclub-'+who+'-'+date+'.json';
   document.body.appendChild(a);a.click();
   document.body.removeChild(a);URL.revokeObjectURL(url);
   showToast('Exported! 📦');
@@ -777,8 +808,82 @@ function deleteDomain(domainId){
 function closeModal(){document.getElementById('modalMount').innerHTML='';}
 function closeIfOverlay(e){if(e.target.classList.contains('modal-overlay'))closeModal();}
 
-loadState();
+function showLogin(){
+  currentUser=null;
+  const users=getUsers();
+  const chips=users.length?`
+    <div class="login-users">
+      ${users.map((u,i)=>`<div class="login-user-chip">
+        <span class="uname" onclick="enterUserIdx(${i})">${escHtml(u)}</span>
+        <i class="ti ti-x" title="Remove this person and their data" onclick="removeUserIdx(${i})"></i>
+      </div>`).join('')}
+    </div>
+    <div class="login-divider">or add someone new</div>` : '';
+  document.getElementById('loginScreen').innerHTML=`
+    <div class="login-card">
+      <div class="login-logo">🌱</div>
+      <h1>Home Club</h1>
+      <p class="login-sub">Who's tracking today?</p>
+      ${chips}
+      <div class="login-form">
+        <input type="text" id="loginName" placeholder="Enter a name…" maxlength="40" autocomplete="off"
+          onkeydown="if(event.key==='Enter')submitLogin()" />
+        <button class="btn btn-primary" onclick="submitLogin()">Start <i class="ti ti-arrow-right"></i></button>
+      </div>
+      <p class="login-note">Each name keeps its own private tracker on this device.</p>
+    </div>`;
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  setTimeout(()=>{const el=document.getElementById('loginName');if(el)el.focus();},60);
+}
+function submitLogin(){
+  const el=document.getElementById('loginName');
+  enterApp(el?el.value:'');
+}
+function enterUserIdx(i){enterApp(getUsers()[i]);}
+function removeUserIdx(i){
+  const users=getUsers();const name=users[i];
+  if(!confirm('Remove "'+name+'" and permanently delete their tracker on this device?'))return;
+  localStorage.removeItem(STORAGE_BASE+'__'+name);
+  users.splice(i,1);saveUsers(users);
+  if(localStorage.getItem(LAST_USER_KEY)===name)localStorage.removeItem(LAST_USER_KEY);
+  showLogin();
+}
+function enterApp(name){
+  name=(name||'').trim();
+  if(!name)return;
+  currentUser=name;
+  const users=getUsers();
+  if(!users.includes(name)){users.push(name);saveUsers(users);}
+  localStorage.setItem(LAST_USER_KEY,name);
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('userBadge').innerHTML='<i class="ti ti-user"></i> '+escHtml(name);
+  loadState();
+}
+function switchUser(){
+  localStorage.removeItem(LAST_USER_KEY);
+  showLogin();
+}
+function migrateLegacy(){
+  if(localStorage.getItem('homeclub_migrated'))return;
+  const legacy=localStorage.getItem(STORAGE_BASE);
+  if(legacy){
+    const name='Saved data';
+    if(!localStorage.getItem(STORAGE_BASE+'__'+name)){
+      localStorage.setItem(STORAGE_BASE+'__'+name,legacy);
+      const users=getUsers();if(!users.includes(name)){users.push(name);saveUsers(users);}
+    }
+  }
+  localStorage.setItem('homeclub_migrated','1');
+}
+function boot(){
+  migrateLegacy();
+  const last=localStorage.getItem(LAST_USER_KEY);
+  if(last&&getUsers().includes(last)){enterApp(last);}
+  else{showLogin();}
+}
+boot();
 </script>
 </body>
 </html>
-
