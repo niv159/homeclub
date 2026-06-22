@@ -6,16 +6,18 @@
 <title>Home Club — Homeschool Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Andika:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --pink-50:#fff0f5;--pink-100:#fdd8e8;--pink-200:#f9a8cc;--pink-400:#e8649a;--pink-600:#b83d70;
   --green-50:#f0faf3;--green-100:#d3f0db;--green-200:#a8ddb5;--green-400:#5cb87a;--green-600:#3a8a54;
+  --bg:#fdf6f9;
 }
-body{font-family:'Andika',sans-serif;background:#fdf6f9;min-height:100vh;font-size:15px}
+body{font-family:'Andika',sans-serif;background:var(--bg);min-height:100vh;font-size:15px}
 h1,h2,h3,.fredoka{font-family:'Fredoka',sans-serif}
 .app{padding:1.5rem;max-width:1200px;margin:0 auto}
-.topbar{background:#fff0f5;border:1.5px solid var(--pink-200);border-radius:18px;padding:1rem 1.4rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.topbar{background:var(--pink-50);border:1.5px solid var(--pink-200);border-radius:18px;padding:1rem 1.4rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .topbar-left{display:flex;align-items:center;gap:12px}
 .logo-blob{width:48px;height:48px;border-radius:14px;background:var(--pink-400);display:flex;align-items:center;justify-content:center;font-size:25px;flex-shrink:0}
 .topbar h1{font-size:24px;font-weight:600;color:var(--pink-600);font-family:'Fredoka',sans-serif}
@@ -91,10 +93,10 @@ tr:hover td{background:#fffafb}
 .save-toast.show{opacity:1}
 .danger-btn{color:#d44;border-color:#fcc}
 .danger-btn:hover{background:#fff5f5;border-color:#f99}
-.login-screen{position:fixed;inset:0;background:#fdf6f9;display:none;align-items:center;justify-content:center;padding:1.5rem;z-index:3000}
+.login-screen{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;padding:1.5rem;z-index:3000}
 .login-card{background:#fff;border:2px solid var(--pink-100);border-radius:24px;padding:2.2rem 2rem;width:420px;max-width:100%;text-align:center;box-shadow:0 12px 44px rgba(184,61,112,.10)}
 .login-logo{width:64px;height:64px;border-radius:18px;background:var(--pink-400);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto .9rem}
-.login-card h1{font-size:28px;color:var(--pink-600);font-family:'Fredoka',sans-serif;font-weight:600}
+.login-card h1{font-size:28px;color:var(--pink-600);font-family:'Fredoka',sans-serif;font-weight:600;margin-bottom:1.4rem}
 .login-sub{font-size:15px;color:var(--pink-400);margin-top:2px;margin-bottom:1.4rem}
 .login-users{display:flex;flex-direction:column;gap:8px;margin-bottom:.4rem}
 .login-user-chip{display:flex;align-items:center;justify-content:space-between;background:var(--pink-50);border:1.5px solid var(--pink-100);border-radius:14px;padding:11px 16px;transition:all .15s}
@@ -105,12 +107,23 @@ tr:hover td{background:#fffafb}
 .login-divider{display:flex;align-items:center;gap:10px;color:#bbb;font-size:13px;margin:1rem 0;font-family:'Andika',sans-serif}
 .login-divider:before,.login-divider:after{content:'';flex:1;height:1px;background:var(--pink-100)}
 .login-form{display:flex;gap:8px}
+.login-fields{display:flex;flex-direction:column;gap:8px}
+.login-fields input{background:var(--pink-50);border:1.5px solid var(--pink-100);border-radius:14px;padding:12px 15px;font-size:15px;font-family:'Andika',sans-serif;color:#333}
+.login-fields input:focus{outline:none;border-color:var(--pink-400);background:#fff}
+.login-fields .btn-primary{justify-content:center;padding:12px;font-size:15px}
+.login-error{font-size:13px;color:#d44;margin-top:.7rem;min-height:1em;font-family:'Andika',sans-serif}
 .login-form input{flex:1;background:var(--pink-50);border:1.5px solid var(--pink-100);border-radius:14px;padding:12px 15px;font-size:15px;font-family:'Andika',sans-serif;color:#333}
 .login-form input:focus{outline:none;border-color:var(--pink-400);background:#fff}
 .login-form .btn-primary{white-space:nowrap}
 .login-note{font-size:12px;color:#bbb;margin-top:1rem;font-family:'Andika',sans-serif;line-height:1.5}
 .user-badge{display:inline-flex;align-items:center;gap:6px;background:var(--green-50);border:1.5px solid var(--green-200);color:var(--green-600);border-radius:20px;padding:7px 14px;font-size:14px;font-family:'Fredoka',sans-serif}
 .user-badge:empty{display:none}
+.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+.theme-opt{display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 6px;border-radius:14px;border:1.5px solid var(--pink-100);cursor:pointer;transition:all .15s}
+.theme-opt:hover{border-color:var(--pink-400);background:var(--pink-50)}
+.theme-opt.sel{border-color:var(--pink-400);background:var(--pink-50);box-shadow:0 0 0 2px var(--pink-200) inset}
+.theme-swatch{width:34px;height:34px;border-radius:50%;border:2px solid rgba(0,0,0,.06)}
+.theme-name{font-size:13px;color:var(--pink-600);font-family:'Fredoka',sans-serif}
 </style>
 </head>
 <body>
@@ -127,7 +140,10 @@ tr:hover td{background:#fffafb}
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
       <span class="user-badge" id="userBadge"></span>
       <button class="btn btn-sm" onclick="switchUser()" title="Switch to a different person"><i class="ti ti-switch-horizontal"></i> Switch</button>
-      <button class="btn btn-sm btn-green" onclick="exportJSON()" title="Download all data as JSON"><i class="ti ti-download"></i> Export</button>
+      <button class="btn btn-sm" onclick="openThemePicker()" title="Change colour theme"><i class="ti ti-palette"></i> Theme</button>
+      <button class="btn btn-sm btn-green" onclick="exportJSON()" title="Download a backup of this tracker"><i class="ti ti-download"></i> Export</button>
+      <button class="btn btn-sm" onclick="document.getElementById('importFile').click()" title="Restore from a backup file"><i class="ti ti-upload"></i> Import</button>
+      <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importJSON(event)" />
       <button class="btn btn-primary" onclick="openAddDomain()"><i class="ti ti-plus"></i> Add domain</button>
     </div>
   </div>
@@ -148,14 +164,66 @@ const COLORS=[
 const ICONS=['📐','🔢','🌍','🎨','🔬','📚','🎵','🏃','🌿','🧩','💬','⭐','🦋','🌈','🐝','🎭','🐣','🌸','🍎','🦊','🌻','🎯','🧸','🖍️'];
 const AGE_BANDS=['0–1','1–2','2–3','3–4','4–5'];
 const AGE_STYLE={'0–1':{bg:'#fff0f5',text:'#b83d70'},'1–2':{bg:'#fff4ee',text:'#b85520'},'2–3':{bg:'#f5f0ff',text:'#5e3db5'},'3–4':{bg:'#f0faf3',text:'#3a8a54'},'4–5':{bg:'#fffbea',text:'#a06a00'}};
-const STORAGE_BASE='homeclub_v2';
-const USERS_KEY='homeclub_users';
-const LAST_USER_KEY='homeclub_lastUser';
-let currentUser=null;
-function storageKey(){return STORAGE_BASE+'__'+currentUser;}
-function getUsers(){try{return JSON.parse(localStorage.getItem(USERS_KEY))||[];}catch(e){return [];}}
-function saveUsers(list){localStorage.setItem(USERS_KEY,JSON.stringify(list));}
+/* ============================================================
+   SUPABASE CONFIG — paste your project values between the quotes.
+   Find them in Supabase → Project Settings → API.
+   The anon key is safe to ship in client code; security comes
+   from the Row Level Security policy on the `trackers` table.
+   ============================================================ */
+const SUPABASE_URL='https://narhluwnyijxsrxwpqgo.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hcmhsdXdueWlqeHNyeHdwcWdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTY0MzEsImV4cCI6MjA5NzY5MjQzMX0.poJJ4TodLySRHNJEMHNisTnrJ_Ht4tsgcn4nNn-wS_c';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+let currentUser=null;   // display name
+let currentUid=null;    // supabase auth user id
+function slug(name){return String(name).trim().toLowerCase().replace(/[^a-z0-9]+/g,'.').replace(/^\.+|\.+$/g,'')||'user';}
+function emailFor(name){return slug(name)+'@homeclub.app';}
+function pwFor(name,pin){return 'hc::'+slug(name)+'::'+pin;}
+function recentNames(){try{return JSON.parse(localStorage.getItem('homeclub_recent'))||[];}catch(e){return [];}}
+function rememberName(n){let l=recentNames().filter(x=>x!==n);l.unshift(n);localStorage.setItem('homeclub_recent',JSON.stringify(l.slice(0,6)));}
+function forgetNameIdx(i){const l=recentNames();l.splice(i,1);localStorage.setItem('homeclub_recent',JSON.stringify(l));showLogin();}
 function escHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+const THEMES={
+  pink:{label:'Blossom',v:{'--pink-50':'#fff0f5','--pink-100':'#fdd8e8','--pink-200':'#f9a8cc','--pink-400':'#e8649a','--pink-600':'#b83d70','--bg':'#fdf6f9'}},
+  lavender:{label:'Lavender',v:{'--pink-50':'#f5f0ff','--pink-100':'#e4d8fa','--pink-200':'#c9b8f4','--pink-400':'#9b7ee8','--pink-600':'#5e3db5','--bg':'#f7f3fd'}},
+  sky:{label:'Sky',v:{'--pink-50':'#f0f8ff','--pink-100':'#d6ecfb','--pink-200':'#aad4f5','--pink-400':'#4eaaee','--pink-600':'#1a6aaa','--bg':'#f3f9ff'}},
+  peach:{label:'Peach',v:{'--pink-50':'#fff4ee','--pink-100':'#ffe2d1','--pink-200':'#ffc8a0','--pink-400':'#f4874b','--pink-600':'#b85520','--bg':'#fff7f2'}},
+  teal:{label:'Teal',v:{'--pink-50':'#eefaf8','--pink-100':'#cdeee8','--pink-200':'#9bdbd0','--pink-400':'#34a899','--pink-600':'#1d7468','--bg':'#f1faf8'}},
+  honey:{label:'Honey',v:{'--pink-50':'#fffbea','--pink-100':'#fdf0c4','--pink-200':'#f9d67a','--pink-400':'#e0991a','--pink-600':'#9c6a00','--bg':'#fffdf3'}},
+};
+let currentTheme='pink';
+function applyTheme(key){
+  if(!THEMES[key])key='pink';
+  currentTheme=key;
+  const root=document.documentElement.style;
+  const v=THEMES[key].v;
+  for(const k in v)root.setProperty(k,v[k]);
+}
+function setTheme(key){
+  applyTheme(key);
+  localStorage.setItem('homeclub_lastTheme',key);
+  if(currentUid)saveState();
+  openThemePicker();
+}
+function openThemePicker(){
+  const swatches=Object.keys(THEMES).map(k=>{
+    const t=THEMES[k];
+    return `<div class="theme-opt${k===currentTheme?' sel':''}" onclick="setTheme('${k}')">
+      <span class="theme-swatch" style="background:${t.v['--pink-400']}"></span>
+      <span class="theme-name">${t.label}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('modalMount').innerHTML=`<div class="modal-overlay" onclick="closeIfOverlay(event)">
+    <div class="modal">
+      <h2>Choose a colour</h2>
+      <div class="sub">Sets the background and accents for this person</div>
+      <div class="theme-grid">${swatches}</div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="closeModal()">Done</button>
+      </div>
+    </div>
+  </div>`;
+}
 let state={activeDomain:0,domains:[],ageFilter:'all'};
 let nextId=200;
 let saveTimer=null;
@@ -541,26 +609,39 @@ function defaultDomains(){
   ];
 }
 
-function loadState(){
+async function loadState(){
   try{
-    const saved=JSON.parse(localStorage.getItem(storageKey()));
-    if(saved&&saved.domains&&saved.domains.length){
-      state.domains=saved.domains;
-      state.activeDomain=Math.min(saved.activeDomain||0,saved.domains.length-1);
+    const {data,error}=await sb.from('trackers').select('data').eq('user_id',currentUid).maybeSingle();
+    const d=(!error&&data)?data.data:null;
+    if(d&&d.domains&&d.domains.length){
+      state.domains=d.domains;
+      state.activeDomain=Math.min(d.activeDomain||0,d.domains.length-1);
+      applyTheme(d.theme||localStorage.getItem('homeclub_lastTheme')||'pink');
     } else {
       state.domains=defaultDomains();
+      applyTheme(localStorage.getItem('homeclub_lastTheme')||'pink');
+      await persist();
     }
-  } catch(e){state.domains=defaultDomains();}
+  } catch(e){
+    state.domains=defaultDomains();
+    applyTheme('pink');
+  }
   render();
+}
+
+async function persist(){
+  if(!currentUid)return;
+  await sb.from('trackers').upsert({
+    user_id:currentUid,
+    data:{domains:state.domains,activeDomain:state.activeDomain,theme:currentTheme},
+    updated_at:new Date().toISOString()
+  });
 }
 
 function saveState(){
   if(saveTimer)clearTimeout(saveTimer);
   saveTimer=setTimeout(()=>{
-    try{
-      localStorage.setItem(storageKey(),JSON.stringify({domains:state.domains,activeDomain:state.activeDomain}));
-      showToast('Saved! 🌿');
-    }catch(e){}
+    persist().then(()=>showToast('Saved! 🌿')).catch(()=>showToast('Save failed — check connection'));
   },600);
 }
 
@@ -571,6 +652,27 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),2000);
 }
 
+function importJSON(ev){
+  const file=ev.target.files&&ev.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const obj=JSON.parse(reader.result);
+      if(!obj||!Array.isArray(obj.domains)||!obj.domains.length){throw new Error('bad');}
+      if(!confirm('Replace the current tracker with the backup? This overwrites what is here now.')){ev.target.value='';return;}
+      state.domains=obj.domains;
+      state.activeDomain=Math.min(obj.activeDomain||0,obj.domains.length-1);
+      if(obj.theme)applyTheme(obj.theme);
+      render();saveState();
+      showToast('Restored! 🌿');
+    }catch(e){
+      alert('That file does not look like a Home Club backup.');
+    }
+    ev.target.value='';
+  };
+  reader.readAsText(file);
+}
 function exportJSON(){
   const data={exportedAt:new Date().toISOString(),version:2,user:currentUser,domains:state.domains};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
@@ -809,79 +911,96 @@ function closeModal(){document.getElementById('modalMount').innerHTML='';}
 function closeIfOverlay(e){if(e.target.classList.contains('modal-overlay'))closeModal();}
 
 function showLogin(){
-  currentUser=null;
-  const users=getUsers();
-  const chips=users.length?`
+  currentUser=null;currentUid=null;
+  const names=recentNames();
+  const chips=names.length?`
     <div class="login-users">
-      ${users.map((u,i)=>`<div class="login-user-chip">
-        <span class="uname" onclick="enterUserIdx(${i})">${escHtml(u)}</span>
-        <i class="ti ti-x" title="Remove this person and their data" onclick="removeUserIdx(${i})"></i>
+      ${names.map((u,i)=>`<div class="login-user-chip">
+        <span class="uname" onclick="pickName(${i})">${escHtml(u)}</span>
+        <i class="ti ti-x" title="Remove this name from this device" onclick="forgetNameIdx(${i})"></i>
       </div>`).join('')}
     </div>
-    <div class="login-divider">or add someone new</div>` : '';
+    <div class="login-divider">or sign in below</div>` : '';
   document.getElementById('loginScreen').innerHTML=`
     <div class="login-card">
       <div class="login-logo">🌱</div>
       <h1>Home Club</h1>
-      <p class="login-sub">Who's tracking today?</p>
       ${chips}
-      <div class="login-form">
-        <input type="text" id="loginName" placeholder="Enter a name…" maxlength="40" autocomplete="off"
-          onkeydown="if(event.key==='Enter')submitLogin()" />
-        <button class="btn btn-primary" onclick="submitLogin()">Start <i class="ti ti-arrow-right"></i></button>
+      <div class="login-fields">
+        <input type="text" id="loginName" placeholder="Your name" maxlength="40" autocomplete="off"
+          onkeydown="if(event.key==='Enter')document.getElementById('loginPin').focus()" />
+        <input type="password" id="loginPin" placeholder="4-digit code" inputmode="numeric" pattern="[0-9]*"
+          maxlength="4" autocomplete="off" onkeydown="if(event.key==='Enter')submitLogin()" />
+        <button class="btn btn-primary" id="loginBtn" onclick="submitLogin()">Start <i class="ti ti-arrow-right"></i></button>
       </div>
-      <p class="login-note">Each name keeps its own private tracker on this device.</p>
+      <p class="login-error" id="loginError"></p>
+      <p class="login-note">Use the same name and 4-digit code on any device to find your tracker.<br>New here? Just pick a name and a code — that creates your account.</p>
     </div>`;
   document.getElementById('loginScreen').style.display='flex';
   document.getElementById('app').style.display='none';
   setTimeout(()=>{const el=document.getElementById('loginName');if(el)el.focus();},60);
 }
-function submitLogin(){
-  const el=document.getElementById('loginName');
-  enterApp(el?el.value:'');
+function pickName(i){
+  const n=recentNames()[i];
+  const el=document.getElementById('loginName');if(el)el.value=n;
+  const p=document.getElementById('loginPin');if(p)p.focus();
 }
-function enterUserIdx(i){enterApp(getUsers()[i]);}
-function removeUserIdx(i){
-  const users=getUsers();const name=users[i];
-  if(!confirm('Remove "'+name+'" and permanently delete their tracker on this device?'))return;
-  localStorage.removeItem(STORAGE_BASE+'__'+name);
-  users.splice(i,1);saveUsers(users);
-  if(localStorage.getItem(LAST_USER_KEY)===name)localStorage.removeItem(LAST_USER_KEY);
-  showLogin();
+function loginError(msg){const e=document.getElementById('loginError');if(e)e.textContent=msg||'';}
+function loginBusy(on){
+  const b=document.getElementById('loginBtn');if(!b)return;
+  b.disabled=on;b.style.opacity=on?'.6':'1';
+  b.innerHTML=on?'Signing in…':'Start <i class="ti ti-arrow-right"></i>';
 }
-function enterApp(name){
-  name=(name||'').trim();
-  if(!name)return;
+async function submitLogin(){
+  const name=(document.getElementById('loginName').value||'').trim();
+  const pin=(document.getElementById('loginPin').value||'').trim();
+  loginError('');
+  if(!name){loginError('Please enter a name.');return;}
+  if(!/^\d{4}$/.test(pin)){loginError('Enter a 4-digit code (numbers only).');return;}
+  loginBusy(true);
+  const email=emailFor(name), pw=pwFor(name,pin);
+  try{
+    // Existing account + correct code:
+    let r=await sb.auth.signInWithPassword({email,password:pw});
+    if(r.error){
+      // Try creating a new account with this name+code:
+      let s=await sb.auth.signUp({email,password:pw,options:{data:{name}}});
+      if(s.error){loginBusy(false);loginError(s.error.message||'Could not sign in.');return;}
+      if(!s.data.session){
+        // No session => name already taken with a different code (or email confirm is on).
+        let r2=await sb.auth.signInWithPassword({email,password:pw});
+        if(r2.error){loginBusy(false);loginError('That name and code don’t match. Check the code, or pick a different name.');return;}
+      }
+    }
+    rememberName(name);
+    await enterApp(name);
+  }catch(e){
+    loginError('Connection problem. Please try again.');
+  }
+  loginBusy(false);
+}
+async function enterApp(name){
   currentUser=name;
-  const users=getUsers();
-  if(!users.includes(name)){users.push(name);saveUsers(users);}
-  localStorage.setItem(LAST_USER_KEY,name);
+  const {data:{user}}=await sb.auth.getUser();
+  currentUid=user?user.id:null;
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('app').style.display='block';
   document.getElementById('userBadge').innerHTML='<i class="ti ti-user"></i> '+escHtml(name);
-  loadState();
+  await loadState();
 }
-function switchUser(){
-  localStorage.removeItem(LAST_USER_KEY);
+async function switchUser(){
+  await sb.auth.signOut();
   showLogin();
 }
-function migrateLegacy(){
-  if(localStorage.getItem('homeclub_migrated'))return;
-  const legacy=localStorage.getItem(STORAGE_BASE);
-  if(legacy){
-    const name='Saved data';
-    if(!localStorage.getItem(STORAGE_BASE+'__'+name)){
-      localStorage.setItem(STORAGE_BASE+'__'+name,legacy);
-      const users=getUsers();if(!users.includes(name)){users.push(name);saveUsers(users);}
-    }
+async function boot(){
+  applyTheme(localStorage.getItem('homeclub_lastTheme')||'pink');
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){
+    const name=(session.user.user_metadata&&session.user.user_metadata.name)||session.user.email.split('@')[0];
+    await enterApp(name);
+  } else {
+    showLogin();
   }
-  localStorage.setItem('homeclub_migrated','1');
-}
-function boot(){
-  migrateLegacy();
-  const last=localStorage.getItem(LAST_USER_KEY);
-  if(last&&getUsers().includes(last)){enterApp(last);}
-  else{showLogin();}
 }
 boot();
 </script>
